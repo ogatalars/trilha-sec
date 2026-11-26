@@ -24,26 +24,31 @@
 
   <h2 id="o-que-cobre">O que o domínio cobre e quanto pesa</h2>
   <p>O Domínio 2 vale <strong>24%</strong> da SY0-801 (na SY0-701 eram 22%). É o segundo maior da prova, algo como 20 a 22 questões, e muitas das questões de cenário mais longas vêm daqui.</p>
-  <p>Na 801, o domínio mudou de nome: de "Threats, Vulnerabilities, and <em>Mitigations</em>" para "Threats, Vulnerabilities, and <em>Attacks</em>". A página oficial da CompTIA lista cinco objetivos:</p>
+  <p>Na 801, o domínio mudou de nome: de "Threats, Vulnerabilities, and <em>Mitigations</em>" para "Threats, Vulnerabilities, and <em>Attacks</em>". O documento oficial de objetivos (versão 2.0) lista seis:</p>
   <div class="table-wrap"><table>
     <thead><tr><th>SY0-801 (oficial, títulos)</th><th>Equivalente na SY0-701</th></tr></thead>
     <tbody>
-      <tr><td>Comparar atores de ameaça comuns e suas motivações</td><td>2.1 (mesmo tema)</td></tr>
-      <tr><td>Explicar vetores de ameaça e superfícies de ataque comuns</td><td>2.2 (mesmo tema)</td></tr>
-      <tr><td>Analisar indicadores de atividade maliciosa</td><td>2.4</td></tr>
-      <tr><td>Examinar vulnerabilidades comuns e riscos associados</td><td>2.3 (agora com ênfase em priorizar mitigação)</td></tr>
-      <tr><td><strong>Explicar os riscos de segurança associados a IA</strong></td><td><strong>Novo</strong>, sem equivalente</td></tr>
+      <tr><td>2.1 Explicar características de ameaças e vulnerabilidades</td><td>Novo na forma: ameaças (feeds, fontes de inteligência, probabilidade, impacto) e vulnerabilidades (CVSS, CVE, priorização)</td></tr>
+      <tr><td>2.2 Descrever atores de ameaça comuns e suas motivações</td><td>2.1 (mesmo tema)</td></tr>
+      <tr><td>2.3 Descrever vetores e fontes de ameaça</td><td>2.2 (mesmo tema)</td></tr>
+      <tr><td>2.4 Explicar tipos de vulnerabilidades e superfícies de ataque</td><td>2.3 (agora com shadow IT e LLMs na lista de superfícies)</td></tr>
+      <tr><td>2.5 Dado um cenário, analisar indicadores de atividade maliciosa</td><td>2.4</td></tr>
+      <tr><td><strong>2.6 Resumir ameaças e vulnerabilidades associadas ao uso de IA</strong></td><td><strong>Novo</strong>, sem equivalente</td></tr>
       <tr><td>(saiu do domínio)</td><td>2.5 Técnicas de mitigação: na 801 o tema aparece no Domínio 4 ("analisar indicadores de vulnerabilidades e implementar mitigações")</td></tr>
     </tbody>
   </table></div>
 
   <div class="callout warn">
     <span class="callout-title">Qual lista de objetivos esta página segue</span>
-    <p>Os <strong>títulos</strong> das seções seguem os objetivos oficiais da <strong>SY0-801</strong> (página da CompTIA conferida em 25/11/2026), na ordem em que ela os lista. A numeração 2.1 a 2.5 é a dessa ordem; confira no PDF oficial. O <strong>conteúdo detalhado</strong> dentro de cada seção segue a lista de sub-tópicos da <strong>SY0-701</strong>, porque não encontrei a lista detalhada da 801 publicada em fonte oficial. A seção de IA usa o resumo oficial da 801 e o OWASP Top 10 para LLMs. Mantive no fim a seção de <strong>mitigações</strong> (2.5 da 701), porque ela cai na 701 e, na 801, aparece no Domínio 4.</p>
+    <p>Os títulos e a numeração das seções seguem o <strong>documento oficial de objetivos da SY0-801, versão 2.0</strong>, linkado na <a href="https://www.comptia.org/en-us/certifications/security/v8/">página da CompTIA</a> (conferido em 26/11/2026). O conteúdo cobre os itens da 801 e mantém os que só existem na 701. Mantive no fim a seção de <strong>mitigações</strong> (2.5 da 701), porque ela cai na 701 e, na 801, aparece no Domínio 4.</p>
   </div>
 
   <!-- ================================================================ -->
-  <h2 id="atores">2.1 · Atores de ameaça e motivações</h2>
+  <h2 id="caracteristicas">2.1 · Características de ameaças e vulnerabilidades</h2>
+  <p>Objetivo curto e conceitual. Do lado da <strong>ameaça</strong>, a lista oficial cita <dfn>feeds de ameaça</dfn> (fluxos de indicadores e alertas publicados por fornecedores, governos e comunidades), fontes de inteligência, probabilidade, impacto e ciclo de vida. Do lado da <strong>vulnerabilidade</strong>, cita pontuação (CVSS), priorização, tipos de vulnerabilidade e CVE. Os conceitos de CVE, CWE e CVSS estão em <a href="../01-fundamentos.html#cve">Fundamentos</a>. O que a prova cobra aqui é usar probabilidade e impacto para decidir o que tratar primeiro, lembrando que a nota CVSS mede a gravidade técnica, não o risco no seu ambiente.</p>
+
+  <!-- ================================================================ -->
+  <h2 id="atores">2.2 · Atores de ameaça e motivações</h2>
   <p>Um <dfn>ator de ameaça</dfn> (<em>threat actor</em>) é quem está por trás do ataque. A prova classifica atores por <strong>atributos</strong> e pede que você deduza quem é a partir do cenário.</p>
   <h3>Atributos</h3>
   <ul>
@@ -60,13 +65,15 @@
       <tr><td><dfn>Hacktivista</dfn></td><td>Externo, sofisticação variável.</td><td>Crença filosófica ou política.</td><td>"desfiguraram o site com mensagem de protesto", "vazaram documentos para expor a empresa".</td></tr>
       <tr><td><dfn>Ameaça interna</dfn> (<em>insider threat</em>)</td><td>Interno; já tem acesso e conhecimento do ambiente.</td><td>Vingança, ganho financeiro, ou simples descuido.</td><td>"funcionário demitido", "acesso fora do horário", "copiou dados antes de sair".</td></tr>
       <tr><td><dfn>Crime organizado</dfn></td><td>Externo, bem financiado, profissional.</td><td>Dinheiro: ransomware, fraude, venda de dados.</td><td>"pediram resgate em criptomoeda", "venda de cartões".</td></tr>
-      <tr><td><dfn>Shadow IT</dfn></td><td>Interno, sem má intenção: gente usando sistemas não aprovados pela TI.</td><td>Conveniência ("é mais rápido assim").</td><td>"o time criou uma conta pessoal na nuvem para o projeto".</td></tr>
+      <tr><td><strong>Acidental</strong> ou não intencional</td><td>Interno, sem má intenção: o erro de quem tem acesso.</td><td>Nenhuma; descuido ou desconhecimento.</td><td>"enviou a planilha para o destinatário errado", "deixou o bucket público sem querer".</td></tr>
+      <tr><td><strong>Terrorista</strong></td><td>Externo, sofisticação variável.</td><td>Ideologia; causar medo e caos.</td><td>"ataque a serviço essencial para causar pânico".</td></tr>
+      <tr><td><strong>Concorrente</strong></td><td>Externo, pode ter bons recursos.</td><td>Propriedade intelectual, vantagem de mercado.</td><td>"roubaram o projeto de um produto que ainda não foi lançado".</td></tr>
     </tbody>
   </table></div>
-  <p>Motivações listadas pela CompTIA: <strong>exfiltração de dados</strong>, <strong>espionagem</strong>, <strong>interrupção de serviço</strong>, <strong>chantagem</strong>, <strong>ganho financeiro</strong>, <strong>crenças filosóficas/políticas</strong>, <strong>motivos éticos</strong> (o pesquisador que reporta falha), <strong>vingança</strong>, <strong>disrupção/caos</strong> e <strong>guerra</strong>. A pergunta típica dá o comportamento e pede a motivação, ou vice-versa.</p>
+  <p>Motivações listadas na 801: <strong>ganho financeiro</strong>, <strong>influência</strong>, <strong>propriedade intelectual</strong>, <strong>notoriedade</strong>, <strong>espionagem</strong>, <strong>medo e caos</strong>, <strong>extorsão</strong>, <strong>curiosidade</strong>, <strong>vingança</strong>, <strong>ideologia</strong>, <strong>política</strong> e <strong>motivos éticos</strong> (o pesquisador que reporta falha). A 701 também citava exfiltração de dados, interrupção de serviço e guerra. A pergunta típica dá o comportamento e pede a motivação, ou vice-versa.</p>
 
   <!-- ================================================================ -->
-  <h2 id="vetores">2.2 · Vetores de ameaça e superfícies de ataque</h2>
+  <h2 id="vetores">2.3 · Vetores e fontes de ameaça</h2>
   <p>O <dfn>vetor de ameaça</dfn> é o <strong>caminho</strong> que o atacante usa para entrar. A <dfn>superfície de ataque</dfn> é a <strong>soma de todos os pontos</strong> expostos onde ele poderia tentar: cada porta aberta, endpoint de API, usuário com e-mail, dependência. Reduzir a superfície (desligar o que não usa) é uma das defesas mais baratas.</p>
 
   <h3>Vetores listados</h3>
@@ -102,7 +109,49 @@
   </table></div>
 
   <!-- ================================================================ -->
-  <h2 id="indicadores">2.3 · Indicadores de atividade maliciosa</h2>
+  <h2 id="vulnerabilidades">2.4 · Tipos de vulnerabilidades e superfícies de ataque</h2>
+  <p>Uma <dfn>vulnerabilidade</dfn> é uma fraqueza que pode ser explorada (o conceito está em <a href="../01-fundamentos.html#risco">Fundamentos</a>). Na 801, o objetivo enfatiza também <strong>avaliar o risco e priorizar a mitigação</strong>: não basta saber o que é, precisa saber o quanto importa.</p>
+
+  <h3>Aplicação</h3>
+  <ul>
+    <li><dfn>Injeção de memória</dfn> (<em>memory injection</em>): inserir código malicioso no espaço de memória de um processo legítimo, que passa a executá-lo (ex.: DLL injection).</li>
+    <li><strong>Buffer overflow</strong>: descrito acima. Linguagens com gerenciamento de memória (Go, Rust, Java) reduzem muito esse risco.</li>
+    <li><dfn>Condição de corrida</dfn> (<em>race condition</em>): o resultado depende da ordem de eventos concorrentes. O caso cobrado é <dfn>TOCTOU</dfn> (<em>time-of-check to time-of-use</em>): o sistema verifica uma condição e, antes de usar, ela muda. Exemplo de dev: checar saldo e debitar em duas queries separadas sem transação; duas requisições simultâneas passam na checagem e o saldo fica negativo.</li>
+    <li><strong>Atualização maliciosa</strong>: o mecanismo de update entrega código malicioso, porque o fornecedor foi comprometido ou o update não é assinado/verificado.</li>
+  </ul>
+
+  <h3>Sistema operacional e web</h3>
+  <p><strong>SO</strong>: sistemas grandes e complexos têm falhas o tempo todo; por isso existe o ciclo mensal de patches. <strong>Web</strong>: <strong>SQL injection</strong> (<dfn>SQLi</dfn>) e <dfn>XSS</dfn> (<em>Cross-Site Scripting</em>, quando o site devolve script do atacante e ele roda no navegador da vítima; veja <a href="../03-appsec.html#xss">XSS</a>). Diferencie: SQLi ataca o <strong>banco</strong> (lado servidor); XSS ataca o <strong>usuário</strong> (lado navegador). Um XSS <strong>refletido</strong> vem no próprio link; um <strong>armazenado</strong> (<em>persistent</em>) fica salvo no site e atinge todo mundo que abre a página.</p>
+
+  <h3>Hardware</h3>
+  <ul>
+    <li><strong>Firmware</strong>: o software embutido no dispositivo; difícil de atualizar e de inspecionar.</li>
+    <li><dfn>Fim de vida</dfn> (<em>end-of-life</em>, EOL): o fabricante parou de vender e, em seguida, de dar suporte. Sem patch, cada nova falha fica aberta para sempre.</li>
+    <li><strong>Legado</strong>: sistemas antigos que continuam em uso porque o negócio depende deles.</li>
+  </ul>
+
+  <h3>Virtualização e nuvem</h3>
+  <ul>
+    <li><dfn>VM escape</dfn>: sair de uma máquina virtual e alcançar o <dfn>hypervisor</dfn> (a camada que roda as VMs), e daí as outras VMs. É o pior caso em virtualização.</li>
+    <li><strong>Reuso de recursos</strong>: memória ou disco de uma VM liberado para outra sem ser limpo, expondo dados.</li>
+    <li><strong>Específicas de nuvem</strong>: bucket público por engano, chaves de acesso expostas, permissões de IAM amplas demais, APIs de gerenciamento expostas. A maioria dos incidentes em nuvem é configuração do cliente, não falha do provedor (é o <dfn>modelo de responsabilidade compartilhada</dfn>: o provedor protege a infraestrutura, o cliente protege o que configura nela; detalhes no Domínio 3).</li>
+  </ul>
+
+  <h3>Cadeia de suprimentos</h3>
+  <p>Três tipos de fornecedor: <strong>de serviço</strong> (um MSP comprometido dá acesso a todos os clientes), <strong>de hardware</strong> (componente adulterado de fábrica) e <strong>de software</strong> (biblioteca ou ferramenta comprometida, como no caso SolarWinds ou em pacotes npm maliciosos). Veja <a href="../04-devsecops.html#sca">SCA</a> e <a href="../04-devsecops.html#supply-chain">supply chain</a>.</p>
+
+  <h3>Criptográficas, configuração, mobile e zero-day</h3>
+  <ul>
+    <li><strong>Criptográficas</strong>: algoritmo fraco ou quebrado (MD5, DES, RC4), chave curta, implementação errada (IV reutilizado, gerador aleatório previsível), certificado expirado.</li>
+    <li><strong>Má configuração</strong> (<em>misconfiguration</em>): credencial padrão, porta aberta sem necessidade, listagem de diretório ligada, modo debug em produção, permissões abertas. É a categoria mais comum na vida real.</li>
+    <li><strong>Mobile</strong>: <dfn>sideloading</dfn> (instalar app de fora da loja oficial, sem a revisão da loja) e <dfn>jailbreaking</dfn>/<em>rooting</em> (remover as restrições de segurança do sistema para ter controle total). Ambos derrubam o modelo de segurança do celular.</li>
+    <li><dfn>Shadow IT</dfn>: sistemas e contas que o time usa sem aprovação da TI ("o time criou uma conta pessoal na nuvem para o projeto"). Na 801 ela aparece aqui, como superfície de ataque, e não mais como ator de ameaça.</li>
+    <li><strong>LLMs</strong>: aplicações com modelos de linguagem também entram na lista de superfícies de ataque da 801. Os riscos estão no <a href="#ia">2.6</a>.</li>
+    <li><dfn>Zero-day</dfn>: vulnerabilidade que o fabricante ainda não conhece ou para a qual ainda não existe patch. Não dá para "aplicar o patch"; a defesa é em camadas: segmentação, detecção por comportamento (EDR), menor privilégio.</li>
+  </ul>
+
+  <!-- ================================================================ -->
+  <h2 id="indicadores">2.5 · Indicadores de atividade maliciosa</h2>
   <p>Este é o objetivo mais denso do domínio. O verbo é "analisar": a questão descreve sintomas e você identifica o ataque. Vamos por família.</p>
 
   <h3 id="malware">Tipos de malware</h3>
@@ -192,48 +241,8 @@
   </table></div>
 
   <!-- ================================================================ -->
-  <h2 id="vulnerabilidades">2.4 · Vulnerabilidades comuns e riscos associados</h2>
-  <p>Uma <dfn>vulnerabilidade</dfn> é uma fraqueza que pode ser explorada (o conceito está em <a href="../01-fundamentos.html#risco">Fundamentos</a>). Na 801, o objetivo enfatiza também <strong>avaliar o risco e priorizar a mitigação</strong>: não basta saber o que é, precisa saber o quanto importa.</p>
-
-  <h3>Aplicação</h3>
-  <ul>
-    <li><dfn>Injeção de memória</dfn> (<em>memory injection</em>): inserir código malicioso no espaço de memória de um processo legítimo, que passa a executá-lo (ex.: DLL injection).</li>
-    <li><strong>Buffer overflow</strong>: descrito acima. Linguagens com gerenciamento de memória (Go, Rust, Java) reduzem muito esse risco.</li>
-    <li><dfn>Condição de corrida</dfn> (<em>race condition</em>): o resultado depende da ordem de eventos concorrentes. O caso cobrado é <dfn>TOCTOU</dfn> (<em>time-of-check to time-of-use</em>): o sistema verifica uma condição e, antes de usar, ela muda. Exemplo de dev: checar saldo e debitar em duas queries separadas sem transação; duas requisições simultâneas passam na checagem e o saldo fica negativo.</li>
-    <li><strong>Atualização maliciosa</strong>: o mecanismo de update entrega código malicioso, porque o fornecedor foi comprometido ou o update não é assinado/verificado.</li>
-  </ul>
-
-  <h3>Sistema operacional e web</h3>
-  <p><strong>SO</strong>: sistemas grandes e complexos têm falhas o tempo todo; por isso existe o ciclo mensal de patches. <strong>Web</strong>: <strong>SQL injection</strong> (<dfn>SQLi</dfn>) e <dfn>XSS</dfn> (<em>Cross-Site Scripting</em>, quando o site devolve script do atacante e ele roda no navegador da vítima; veja <a href="../03-appsec.html#xss">XSS</a>). Diferencie: SQLi ataca o <strong>banco</strong> (lado servidor); XSS ataca o <strong>usuário</strong> (lado navegador). Um XSS <strong>refletido</strong> vem no próprio link; um <strong>armazenado</strong> (<em>persistent</em>) fica salvo no site e atinge todo mundo que abre a página.</p>
-
-  <h3>Hardware</h3>
-  <ul>
-    <li><strong>Firmware</strong>: o software embutido no dispositivo; difícil de atualizar e de inspecionar.</li>
-    <li><dfn>Fim de vida</dfn> (<em>end-of-life</em>, EOL): o fabricante parou de vender e, em seguida, de dar suporte. Sem patch, cada nova falha fica aberta para sempre.</li>
-    <li><strong>Legado</strong>: sistemas antigos que continuam em uso porque o negócio depende deles.</li>
-  </ul>
-
-  <h3>Virtualização e nuvem</h3>
-  <ul>
-    <li><dfn>VM escape</dfn>: sair de uma máquina virtual e alcançar o <dfn>hypervisor</dfn> (a camada que roda as VMs), e daí as outras VMs. É o pior caso em virtualização.</li>
-    <li><strong>Reuso de recursos</strong>: memória ou disco de uma VM liberado para outra sem ser limpo, expondo dados.</li>
-    <li><strong>Específicas de nuvem</strong>: bucket público por engano, chaves de acesso expostas, permissões de IAM amplas demais, APIs de gerenciamento expostas. A maioria dos incidentes em nuvem é configuração do cliente, não falha do provedor (é o <dfn>modelo de responsabilidade compartilhada</dfn>: o provedor protege a infraestrutura, o cliente protege o que configura nela; detalhes no Domínio 3).</li>
-  </ul>
-
-  <h3>Cadeia de suprimentos</h3>
-  <p>Três tipos de fornecedor: <strong>de serviço</strong> (um MSP comprometido dá acesso a todos os clientes), <strong>de hardware</strong> (componente adulterado de fábrica) e <strong>de software</strong> (biblioteca ou ferramenta comprometida, como no caso SolarWinds ou em pacotes npm maliciosos). Veja <a href="../04-devsecops.html#sca">SCA</a> e <a href="../04-devsecops.html#supply-chain">supply chain</a>.</p>
-
-  <h3>Criptográficas, configuração, mobile e zero-day</h3>
-  <ul>
-    <li><strong>Criptográficas</strong>: algoritmo fraco ou quebrado (MD5, DES, RC4), chave curta, implementação errada (IV reutilizado, gerador aleatório previsível), certificado expirado.</li>
-    <li><strong>Má configuração</strong> (<em>misconfiguration</em>): credencial padrão, porta aberta sem necessidade, listagem de diretório ligada, modo debug em produção, permissões abertas. É a categoria mais comum na vida real.</li>
-    <li><strong>Mobile</strong>: <dfn>sideloading</dfn> (instalar app de fora da loja oficial, sem a revisão da loja) e <dfn>jailbreaking</dfn>/<em>rooting</em> (remover as restrições de segurança do sistema para ter controle total). Ambos derrubam o modelo de segurança do celular.</li>
-    <li><dfn>Zero-day</dfn>: vulnerabilidade que o fabricante ainda não conhece ou para a qual ainda não existe patch. Não dá para "aplicar o patch"; a defesa é em camadas: segmentação, detecção por comportamento (EDR), menor privilégio.</li>
-  </ul>
-
-  <!-- ================================================================ -->
-  <h2 id="ia">2.5 · Riscos de segurança associados a IA (novo na 801)</h2>
-  <p>Este é o único objetivo totalmente novo do domínio. O resumo oficial fala em riscos ligados a "sistemas de IA, modelos, prompts, privacidade e exposição de dados". A lista detalhada não estava disponível para conferência, então organizei pelos riscos do <a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 para aplicações com LLM</a>, a referência mais usada do mercado. Um <dfn>LLM</dfn> (<em>Large Language Model</em>) é o tipo de modelo por trás de assistentes como ChatGPT e Claude.</p>
+  <h2 id="ia">2.6 · Ameaças e vulnerabilidades associadas ao uso de IA (novo na 801)</h2>
+  <p>Este é o objetivo totalmente novo do domínio. A lista oficial tem 13 itens: <em>model manipulation</em>, <em>poisoning</em>, <em>prompt injection</em>, <em>data loss</em>, <em>bias</em>, <em>explainability</em>, <em>hallucinations</em>, <em>jailbreaking</em>, <em>evasion</em>, <em>privacy</em>, <em>ethical considerations</em>, <em>session hijacking</em> e <em>code execution</em>. A tabela explica os que mais aparecem em cenário, com apoio do <a href="https://genai.owasp.org/top-10-for-llm-applications-2026/">OWASP Top 10 para aplicações com LLM</a>; os demais vêm logo depois dela. Um <dfn>LLM</dfn> (<em>Large Language Model</em>) é o tipo de modelo por trás de assistentes como ChatGPT e Claude.</p>
   <div class="table-wrap"><table>
     <thead><tr><th>Risco</th><th>O que é</th><th>Exemplo</th></tr></thead>
     <tbody>
@@ -247,6 +256,15 @@
       <tr><td><strong>Consumo sem limite</strong></td><td>Requisições caras que esgotam cota ou orçamento.</td><td>Abuso de uma API de LLM aberta gera conta altíssima (uma forma de DoS financeiro).</td></tr>
     </tbody>
   </table></div>
+  <p>Os outros itens da lista oficial:</p>
+  <ul>
+    <li><dfn>Manipulação de modelo</dfn> (<em>model manipulation</em>): alterar o modelo ou seus parâmetros para mudar o comportamento, por exemplo trocando o arquivo do modelo por uma versão adulterada.</li>
+    <li><dfn>Evasão</dfn> (<em>evasion</em>): montar uma entrada que engana o modelo na hora do uso, como um malware ajustado para passar por um classificador de IA.</li>
+    <li><dfn>Viés</dfn> (<em>bias</em>) e <dfn>explicabilidade</dfn> (<em>explainability</em>): o modelo pode decidir de forma injusta, e nem sempre dá para explicar por que decidiu. Pesa quando a IA aprova crédito, filtra currículo ou bloqueia acesso.</li>
+    <li><strong>Privacidade</strong> e <strong>considerações éticas</strong>: dado pessoal no treino ou no prompt, consentimento, uso aceitável.</li>
+    <li><strong>Sequestro de sessão</strong> (<em>session hijacking</em>): roubar a sessão de um usuário numa aplicação de IA para ver o histórico de conversas ou agir em nome dele.</li>
+    <li><strong>Execução de código</strong> (<em>code execution</em>): quando a saída do modelo é executada (um agente que roda comandos, um plugin que avalia código), prompt injection vira execução de código.</li>
+  </ul>
   <p>As mitigações são as mesmas ideias de sempre, aplicadas a um componente novo: tratar a saída do modelo como <strong>input não confiável</strong>, <strong>menor privilégio</strong> para agentes, aprovação humana para ações destrutivas, política de uso aceitável de IA, filtros de dados sensíveis (<dfn>DLP</dfn>, <em>Data Loss Prevention</em>) e rate limit.</p>
 
   <!-- ================================================================ -->
@@ -287,7 +305,7 @@
       <li><strong>Desinformação vs misinformation</strong>: com intenção vs sem intenção.</li>
       <li><strong>Evil twin vs rogue AP</strong>: AP falso que imita a rede legítima vs AP não autorizado ligado à rede interna.</li>
       <li><strong>Hacktivista vs estado-nação</strong>: ambos podem ter motivação política; recursos enormes, persistência e espionagem apontam estado-nação.</li>
-      <li><strong>Shadow IT</strong> é ator de ameaça <em>interno e sem má intenção</em>.</li>
+      <li><strong>Shadow IT</strong>: na 701 aparecia como ator de ameaça interno e sem má intenção; na 801 está no 2.4, como superfície de ataque. O ator "sem má intenção" da 801 é o <strong>acidental</strong>.</li>
       <li><strong>Zero-day</strong>: "aplicar o patch" nunca é a resposta, porque ele não existe.</li>
       <li><strong>Prompt injection vs jailbreaking</strong>: sequestrar as instruções da aplicação (muitas vezes via conteúdo de terceiros) vs contornar as proteções do próprio modelo.</li>
     </ul>
@@ -360,7 +378,7 @@
     <li>Indicadores: <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/an-overview-of-malware-sy0-701/">An Overview of Malware</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/viruses-and-worms-sy0-701/">Viruses and Worms</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/other-malware-types-sy0-701/">Other Malware Types</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/denial-of-service-sy0-701/">Denial of Service</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/dns-attacks-sy0-701/">DNS Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/wireless-attacks-sy0-701/">Wireless Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/on-path-attacks-sy0-701/">On-path Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/application-attacks-sy0-701/">Application Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/cryptographic-attacks-sy0-701/">Cryptographic Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/password-attacks-sy0-701/">Password Attacks</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/indicators-of-compromise-sy0-701/">Indicators of Compromise</a></li>
     <li>Vulnerabilidades: <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/race-conditions-sy0-701/">Race Conditions</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/virtualization-vulnerabilities-sy0-701/">Virtualization Vulnerabilities</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/supply-chain-vulnerabilities-sy0-701/">Supply Chain Vulnerabilities</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/zero-day-vulnerabilities-sy0-701/">Zero-day Vulnerabilities</a></li>
     <li>Mitigação: <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/segmentation-and-access-control-sy0-701/">Segmentation and Access Control</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/mitigation-techniques-sy0-701/">Mitigation Techniques</a>, <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/hardening-techniques-sy0-701/">Hardening Techniques</a></li>
-    <li>IA: <a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 para aplicações com LLM</a> (versão 2025), base da seção 2.5</li>
+    <li>IA: <a href="https://genai.owasp.org/top-10-for-llm-applications-2026/">OWASP Top 10 para aplicações com LLM</a> (edição 2026), apoio da seção 2.6</li>
     <li><a href="https://www.comptia.org/en-us/certifications/security/v8/">Página oficial da Security+ V8 (SY0-801)</a></li>
   </ul>
 

@@ -53,6 +53,8 @@
       <tr><td><a href="http://flaws.cloud/">flaws.cloud</a> e <a href="http://flaws2.cloud/">flaws2.cloud</a></td><td>Nuvem</td><td>Erros reais de configuração da AWS (bucket S3 aberto, credenciais expostas), resolvidos no navegador e na AWS CLI. Alguns níveis pedem uma conta AWS qualquer, mas você não cria recursos.</td><td>Gratuito</td></tr>
       <tr><td><a href="https://github.com/RhinoSecurityLabs/cloudgoat">CloudGoat</a></td><td>Nuvem</td><td>Cenários vulneráveis criados com Terraform dentro da <strong>sua</strong> conta AWS.</td><td>A ferramenta é grátis, mas os recursos criados na AWS podem gerar cobrança. Prefira flaws.cloud.</td></tr>
       <tr><td><a href="https://github.com/madhuakula/kubernetes-goat">Kubernetes Goat</a></td><td>DevSecOps, Nuvem</td><td>Cluster Kubernetes vulnerável de propósito, para rodar localmente (por exemplo com kind).</td><td>Gratuito (open source)</td></tr>
+      <tr><td><a href="https://portswigger.net/web-security/llm-attacks">PortSwigger Web LLM attacks</a></td><td>AppSec, IA</td><td>Laboratórios de ataque a aplicações com LLM: prompt injection direta e indireta, abuso das APIs que o modelo pode chamar e saída sem tratamento.</td><td>Gratuito</td></tr>
+      <tr><td><a href="https://github.com/microsoft/AI-Red-Teaming-Playground-Labs">AI Red Teaming Playground Labs</a> (Microsoft)</td><td>IA</td><td>Desafios de red teaming em aplicações com IA, incluindo injeção indireta, para rodar localmente.</td><td>Open source (MIT), mas usa uma API de modelo paga (OpenAI ou Azure OpenAI)</td></tr>
     </tbody>
   </table></div>
   <div class="callout warn">
@@ -156,6 +158,7 @@ sigma convert -t splunk --without-pipeline regras/ssh_bruteforce.yml</code></pre
     <div class="card"><span class="n">02</span><h3>Repositório de detecções</h3><p>Regras Sigma com logs de teste (um que deve disparar, um que não deve), validação no CI e mapeamento ATT&amp;CK num arquivo do Navigator.</p></div>
     <div class="card"><span class="n">03</span><h3>Write-ups</h3><p>Relatos passo a passo de labs e CTFs: o que você tentou, o que deu errado, como resolveu e como se defender. Escreva só sobre desafios em que a plataforma permite publicar solução.</p></div>
     <div class="card"><span class="n">04</span><h3>Relatório de incidente simulado</h3><p>Pegue um lab do CyberDefenders e escreva como se fosse um incidente real: linha do tempo, impacto, contenção e lições, no formato de postmortem.</p></div>
+    <div class="card"><span class="n">05</span><h3>Threat model de um app com IA</h3><p>Pegue um app simples com LLM (um chatbot que busca em documentos, por exemplo), desenhe o fluxo de dados, aplique STRIDE e o OWASP Top 10 para LLMs e escreva as mitigações. Para ir além: uma regra Sigma que detecta abuso do agente.</p></div>
   </div>
   <div class="callout dev">
     <span class="callout-title">Ponte com o que você já faz</span>

@@ -208,7 +208,7 @@ level: medium</code></pre>
       <tr><td>10:06</td><td>CloudTrail registra <code>GetCallerIdentity</code> com essa chave vindo de um IP desconhecido: o atacante está testando se a chave funciona. Técnica: <code>T1078.004</code> Valid Accounts: Cloud Accounts.</td><td>Detecção e análise</td></tr>
       <tr><td>10:09</td><td>Vários <code>RunInstances</code> de máquinas grandes em regiões que a empresa nunca usa. Uma detecção "criação de instância em região não utilizada" dispara. Técnica provável: <code>T1496</code> Resource Hijacking (mineração).</td><td>Detecção e análise</td></tr>
       <tr><td>10:15</td><td>L1 confirma que não é deploy legítimo e escala. L2 abre incidente e filtra o CloudTrail pelo ID da chave para listar <strong>tudo</strong> que ela fez desde 10:02.</td><td>Detecção e análise</td></tr>
-      <tr><td>10:18</td><td>A chave é desativada (<code>aws iam update-access-key --status Inactive</code>). Desativar primeiro, em vez de apagar, preserva a evidência e permite reverter se algo legítimo quebrar.</td><td>Contenção</td></tr>
+      <tr><td>10:18</td><td>A chave é desativada (<code>aws iam update-access-key --user-name &lt;usuário&gt; --access-key-id &lt;id&gt; --status Inactive</code>) e o usuário dono dela recebe a política <code>AWSDenyAll</code>. Desativar a chave não derruba credenciais temporárias que o atacante já tenha gerado com ela, que podem valer até 36 horas; a negação explícita derruba. Identidades que ele criou com a chave também são bloqueadas aqui. Desativar primeiro, em vez de apagar, preserva a evidência e permite reverter se algo legítimo quebrar.</td><td>Contenção</td></tr>
       <tr><td>10:40</td><td>Instâncias criadas pelo atacante são encerradas; um usuário IAM que ele criou para manter acesso (<dfn>persistência</dfn>, garantir que continua dentro mesmo depois de perder a credencial original) é removido. A chave é apagada e uma nova é emitida para o serviço legítimo, guardada num gerenciador de segredos.</td><td>Erradicação e recuperação</td></tr>
       <tr><td>Dias depois</td><td>Postmortem: por que o <code>.env</code> não estava no <code>.gitignore</code>? Ações: hook de pre-commit com detector de segredos, trocar chaves fixas por credenciais temporárias, bloquear regiões não usadas, nova detecção para <code>GetCallerIdentity</code> vindo de IP fora da empresa.</td><td>Pós-incidente</td></tr>
     </tbody>
@@ -241,6 +241,17 @@ level: medium</code></pre>
     <li><dfn>MTTR</dfn> (<em>Mean Time To Respond</em>, às vezes <em>to Recover</em>): tempo médio entre a detecção e a contenção ou resolução. Confirme sempre qual definição o time usa, porque a sigla é ambígua.</li>
   </ul>
   <p>São as mesmas métricas que times de SRE usam para incidentes de disponibilidade. Junto delas, vale acompanhar a precisão de cada regra e a cobertura no ATT&amp;CK. E vale o aviso de sempre sobre métricas: se o time for cobrado só por MTTR baixo, vai aprender a fechar alertas rápido, não bem.</p>
+
+  <div class="callout ia">
+    <span class="callout-title">E com IA?</span>
+    <ul>
+      <li><strong>MITRE ATLAS</strong> é o "ATT&amp;CK da IA": táticas e técnicas de ataque contra sistemas de IA, com casos reais. Serve para o mesmo que o ATT&amp;CK: vocabulário comum e mapa de cobertura. <a href="https://atlas.mitre.org/">atlas.mitre.org</a></li>
+      <li><strong>LLMjacking, uma variação do incidente acima.</strong> Em vez de minerar, o atacante usa a chave roubada para chamar modelos de IA pagos na sua conta (na AWS, pelo Bedrock). Detecção possível: chamadas de invocação de modelo vindas de identidade ou IP incomum, e mudanças na configuração de log dessas chamadas.</li>
+      <li><strong>LLM no SOC ajuda, mas não decide.</strong> Ele resume alertas e escreve consultas, mas erra com confiança e pode ser enganado por texto que o atacante plantou num campo de log. A decisão de conter fica com uma pessoa.</li>
+      <li><strong>Registre o uso de IA.</strong> Quem chamou qual modelo, com quais ferramentas, e o que o agente executou: é a matéria-prima para detectar abuso de agentes.</li>
+    </ul>
+    <p>Mais em <a href="09-sdlc-e-ia.html">SDLC seguro e IA</a>.</p>
+  </div>
 
   <h2 id="checkpoint">Checkpoint</h2>
   <details><summary>1. Qual a diferença entre Red, Blue e Purple Team?</summary><p>Blue defende (detecta e responde), Red ataca com autorização para testar a defesa, e Purple é o trabalho conjunto em que o red executa técnicas e o blue confirma ou corrige as detecções na hora.</p></details>

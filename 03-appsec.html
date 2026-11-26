@@ -66,7 +66,7 @@
 # Resultado: devolve TODOS os usuários.</span></code></pre>
   <p>A correção é a <dfn>query parametrizada</dfn> (também chamada de <em>prepared statement</em>): você manda o texto da query e os valores separadamente para o driver do banco. O banco compila a query primeiro e só depois encaixa os valores, que são tratados sempre como dado, nunca como SQL.</p>
 <pre><code><span class="ok">def buscar_usuario(email):
-    sql = "SELECT id, nome FROM usuarios WHERE email = %s"   <span class="c"># placeholder</span>
+    sql = "SELECT id, nome FROM usuarios WHERE email = %s"   <span class="c"># placeholder do psycopg; no sqlite3 é ?</span>
     return db.execute(sql, (email,)).fetchall()             <span class="c"># valor separado</span></span>
 
 <span class="c">// Node + pg: mesma ideia</span>
@@ -76,7 +76,7 @@
     <span class="callout-title">Ponte com o que você já faz</span>
     <p>ORMs como SQLAlchemy, Django ORM, Prisma e TypeORM parametrizam por padrão. O risco volta quando você usa as "saídas de emergência": <code>raw()</code>, <code>text()</code>, <code>$queryRawUnsafe</code>, ou interpola nome de coluna para um <code>ORDER BY</code> dinâmico. Nome de coluna não pode ser parâmetro; nesses casos, compare com uma lista fixa de colunas permitidas.</p>
   </div>
-  <p>O mesmo raciocínio vale para outras injeções: <dfn>command injection</dfn> (montar um comando de shell com entrada do usuário, como <code>os.system("convert " + arquivo)</code>; a correção é passar argumentos como lista, <code>subprocess.run(["convert", arquivo])</code>, sem <code>shell=True</code>) e injeção em LDAP, NoSQL ou templates.</p>
+  <p>O mesmo raciocínio vale para outras injeções: <dfn>command injection</dfn> (montar um comando de shell com entrada do usuário, como <code>os.system("convert " + arquivo)</code>; a correção é passar argumentos como lista, <code>subprocess.run(["convert", arquivo])</code>, sem <code>shell=True</code>; isso fecha a injeção de shell, mas um <code>arquivo</code> que começa com <code>-</code> ainda vira opção do programa, a <dfn>argument injection</dfn>, então gere o nome no servidor ou valide por lista de permitidos, e use <code>--</code> antes dos argumentos quando o programa aceitar) e injeção em LDAP, NoSQL ou templates.</p>
 
   <h2 id="xss">XSS (Cross-Site Scripting)</h2>
   <p><dfn>XSS</dfn> (<em>Cross-Site Scripting</em>) é injeção, só que no navegador: a aplicação coloca dado do usuário dentro do HTML sem tratar, e esse dado vira JavaScript executando na página de outra pessoa. Com isso o atacante pode agir como a vítima: ler dados da tela, fazer requisições autenticadas em nome dela, trocar o e-mail da conta.</p>
@@ -176,7 +176,8 @@ ph.verify(hash, tentativa)      <span class="c"># lança exceção se não bater
   <ul>
     <li><strong>Mensagens de erro iguais</strong> para "usuário não existe" e "senha errada", para não permitir descobrir quais e-mails têm conta (<em>user enumeration</em>). Vale também para "esqueci minha senha".</li>
     <li><strong>Sessão</strong>: gere um novo ID de sessão após o login, defina expiração e invalide no logout.</li>
-    <li><strong>JWT</strong> (<em>JSON Web Token</em>, token assinado que carrega dados do usuário): valide a assinatura com o algoritmo fixado no servidor, nunca aceite <code>alg: none</code> e lembre que o conteúdo é apenas codificado em base64, não criptografado.</li>
+    <li><strong>JWT</strong> (<em>JSON Web Token</em>, token assinado que carrega dados do usuário): valide a assinatura com o algoritmo fixado no servidor, confira <code>exp</code>, <code>iss</code> e <code>aud</code>, nunca aceite <code>alg: none</code> e lembre que o conteúdo é apenas codificado em base64, não criptografado.</li>
+    <li><strong>Política de senha</strong>: o <a href="https://pages.nist.gov/800-63-4/sp800-63b.html">NIST SP 800-63B-4</a> (2025) pede no mínimo 15 caracteres quando a senha é o único fator (8 quando faz parte de MFA), proíbe exigir mistura de tipos de caractere e troca periódica, e manda recusar senhas que aparecem em listas de vazamento.</li>
     <li><strong>Não invente</strong>: prefira a biblioteca de autenticação do framework ou um provedor de identidade a escrever o seu fluxo de login.</li>
   </ul>
 
@@ -248,7 +249,8 @@ ph.verify(hash, tentativa)      <span class="c"># lança exceção se não bater
     <li><strong>Criptografia</strong>: algoritmo caseiro, MD5/SHA-1 para senha, <code>random</code> em vez de <code>secrets</code> para gerar token?</li>
     <li><strong>Erros</strong>: exceção na checagem de permissão nega (fail closed) ou libera? Stack trace vai para o cliente?</li>
     <li><strong>Logs</strong>: eventos de segurança (login, falha, troca de senha, ação administrativa) são registrados? Dado sensível (senha, token, CPF) fica fora do log?</li>
-    <li><strong>Dependências</strong>: biblioteca nova é mantida, popular e com nome correto (cuidado com <em>typosquatting</em>, pacotes com nome parecido de propósito, como <code>reqeusts</code>)?</li>
+    <li><strong>Dependências</strong>: biblioteca nova é mantida, popular e com nome correto (cuidado com <em>typosquatting</em>, pacotes com nome parecido de propósito, como <code>reqeusts</code>)? Se o nome veio de uma sugestão de IA, o pacote existe mesmo, e quem publica? Modelos inventam nomes de pacote, e atacantes registram esses nomes (<em>slopsquatting</em>).</li>
+    <li><strong>Código gerado por IA</strong>: passou pela mesma revisão que o código escrito à mão? Quem pediu o código ao assistente entende o que ele faz?</li>
   </ul>
   <p>Para algo mais completo que este checklist existe o <dfn>OWASP ASVS</dfn> (<em>Application Security Verification Standard</em>): uma lista grande de requisitos verificáveis, organizada por área (autenticação, sessão, validação, criptografia...) e em três níveis de rigor. O nível 1 é o mínimo para qualquer aplicação; o 3 é para sistemas críticos. É útil como fonte de critérios de aceite ("este endpoint atende ASVS nível 2 em controle de acesso") e como roteiro de estudo. Para consulta rápida por tema, os <em>OWASP Cheat Sheets</em> são curtos e práticos.</p>
 
@@ -256,12 +258,24 @@ ph.verify(hash, tentativa)      <span class="c"># lança exceção se não bater
   <div class="grid">
     <a class="card" href="https://portswigger.net/web-security"><span class="n">grátis</span><h3>PortSwigger Web Security Academy</h3><p>Do time que faz o Burp Suite. Teoria curta e centenas de laboratórios online por tema: SQLi, XSS, controle de acesso, SSRF, autenticação. Comece pelos laboratórios "Apprentice".</p></a>
     <a class="card" href="https://owasp.org/www-project-juice-shop/"><span class="n">grátis · open source</span><h3>OWASP Juice Shop</h3><p>Uma loja online cheia de falhas de propósito, em Node e Angular. Rode com <code>docker run -p 3000:3000 bkimminich/juice-shop</code> e acompanhe os desafios no placar.</p></a>
+    <a class="card" href="https://portswigger.net/web-security/llm-attacks"><span class="n">grátis · IA</span><h3>Web LLM attacks</h3><p>Também da PortSwigger: laboratórios de ataque a aplicações com LLM, como prompt injection direta e indireta, abuso das APIs que o modelo pode chamar e saída do modelo sem tratamento.</p></a>
   </div>
   <div class="callout warn">
     <span class="callout-title">Armadilha comum</span>
     <p>Teste só o que é seu ou o que foi feito para isso (laboratórios, programas de bug bounty dentro do escopo publicado). Testar o site de uma empresa sem autorização é crime em muitos países, incluindo o Brasil (Lei 12.737/2012), mesmo "só para ver se funciona".</p>
   </div>
   <p>Uma sugestão de ordem: faça os laboratórios de SQLi, XSS e Access Control na Academy; depois resolva os desafios de 1 e 2 estrelas do Juice Shop; por fim, pegue um projeto pessoal seu e faça o threat model e a revisão com o checklist acima. Esse último vira um ótimo texto para portfólio.</p>
+
+  <div class="callout ia">
+    <span class="callout-title">E com IA?</span>
+    <p>Aplicação que usa LLM tem um Top 10 próprio: o <a href="https://genai.owasp.org/top-10-for-llm-applications-2026/">OWASP Top 10 para aplicações com LLM</a>, edição 2026. Três itens se ligam direto ao que você viu nesta página:</p>
+    <ul>
+      <li><strong>LLM01 Prompt Injection</strong>: é a injeção desta página com outra cara. O modelo não separa instrução de dado, então um texto escondido num PDF, numa página ou num e-mail que ele lê pode virar ordem (<em>injeção indireta</em>). Um bom exercício: refazer o STRIDE da API de upload imaginando que um LLM resume o PDF enviado.</li>
+      <li><strong>LLM10 Improper Output Handling</strong>: a saída do modelo é entrada não confiável. Escape antes de pôr na página e nunca execute direto como SQL ou comando, senão o XSS e a injeção voltam por outra porta.</li>
+      <li><strong>LLM03 Excessive Agency</strong>: agente com ferramentas demais é controle de acesso quebrado. Dê só o que a tarefa pede e exija confirmação humana para ação destrutiva.</li>
+    </ul>
+    <p>Dois cuidados a mais: arquivo de modelo no formato <code>pickle</code> é desserialização insegura (carregar um modelo baixado pode executar código; prefira <code>safetensors</code>), e agentes com ferramentas têm um Top 10 separado, o <a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/">OWASP Top 10 para Aplicações Agênticas</a>. Mais em <a href="09-sdlc-e-ia.html">SDLC seguro e IA</a>.</p>
+  </div>
 
   <h2 id="checkpoint">Checkpoint</h2>
   <details><summary>Por que query parametrizada resolve SQL injection melhor do que escapar aspas?</summary><p>Porque o texto da query e os valores chegam separados ao banco: a query é compilada antes, e o valor é sempre tratado como dado. Escapar à mão depende de cobrir todos os contextos e codificações, e um único esquecimento reabre a falha.</p></details>

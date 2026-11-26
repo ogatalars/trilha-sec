@@ -83,7 +83,7 @@
     <li><dfn>Autenticação</dfn> (abreviada <dfn>AuthN</dfn>): provar <strong>quem você é</strong>. Login com senha, certificado, chave de API.</li>
     <li><dfn>Autorização</dfn> (abreviada <dfn>AuthZ</dfn>): decidir <strong>o que você pode fazer</strong>, depois que já se sabe quem é. "Este usuário pode editar este pedido?"</li>
   </ul>
-  <p>Na API do exemplo, o usuário estava autenticado (tinha token válido), mas faltava autorização: ninguém conferia se o pedido era dele. Esse tipo de falha é tão comum que lidera a lista OWASP Top 10 de 2021 com o nome <em>Broken Access Control</em> (a OWASP é uma fundação aberta de segurança de aplicações; você vai vê-la muito na página de AppSec).</p>
+  <p>Na API do exemplo, o usuário estava autenticado (tinha token válido), mas faltava autorização: ninguém conferia se o pedido era dele. Esse tipo de falha é tão comum que lidera o OWASP Top 10, nas edições de 2021 e de 2025, com o nome <em>Broken Access Control</em> (a OWASP é uma fundação aberta de segurança de aplicações; você vai vê-la muito na página de AppSec).</p>
 
   <h3>MFA</h3>
   <p><dfn>MFA</dfn> (<em>Multi-Factor Authentication</em>, autenticação multifator) exige dois ou mais fatores de tipos diferentes: algo que você <strong>sabe</strong> (senha), algo que você <strong>tem</strong> (celular com app autenticador, chave física) e algo que você <strong>é</strong> (biometria). O porquê: senhas vazam o tempo todo, e com MFA a senha sozinha não basta para entrar. Duas senhas não são MFA, porque são o mesmo tipo de fator.</p>
@@ -106,6 +106,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MiIsInJvbGUiOiJ1c2VyIn0.xxxx
       <li><strong>JWT não é criptografado por padrão</strong>, só assinado. Não coloque dado sensível no payload.</li>
       <li><strong>Aceitar <code>alg: none</code></strong> ou deixar o token escolher o algoritmo já permitiu forjar tokens em bibliotecas antigas. Fixe o algoritmo esperado ao validar.</li>
       <li><strong>Revogar é difícil</strong>: um JWT roubado vale até expirar. Por isso use expiração curta.</li>
+      <li><strong>Assinatura válida não basta</strong>: confira também a expiração (<code>exp</code>), quem emitiu (<code>iss</code>) e para quem o token foi emitido (<code>aud</code>). Um token legítimo de outro serviço não deve valer no seu (RFC 8725).</li>
     </ul>
   </div>
 
@@ -161,10 +162,21 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MiIsInJvbGUiOiJ1c2VyIn0.xxxx
   <h2 id="frameworks">Frameworks e leis que você vai ouvir</h2>
   <p>Um <dfn>framework</dfn>, em segurança, é um conjunto organizado de práticas e controles recomendados. Por enquanto basta reconhecer os nomes:</p>
   <ul>
-    <li><strong>NIST CSF</strong> (<em>Cybersecurity Framework</em>, do instituto de padrões dos EUA): organiza o programa de segurança em funções como identificar, proteger, detectar, responder e recuperar.</li>
+    <li><strong>NIST CSF</strong> (<em>Cybersecurity Framework</em>, do instituto de padrões dos EUA): na versão 2.0, de 2024, organiza o programa de segurança em seis funções: governar, identificar, proteger, detectar, responder e recuperar. Governar, a função nova, trata de papéis, políticas e gestão de risco.</li>
     <li><strong>ISO/IEC 27001</strong>: norma internacional para um sistema de gestão de segurança da informação; empresas podem ser certificadas nela, e clientes grandes costumam exigir.</li>
     <li><strong>LGPD</strong> (Lei Geral de Proteção de Dados, Lei 13.709/2018): a lei brasileira sobre tratamento de dados pessoais; vazamento de dado pessoal pode gerar obrigação de comunicar a ANPD (a autoridade nacional) e os titulares, além de sanções.</li>
   </ul>
+
+  <div class="callout ia">
+    <span class="callout-title">E com IA?</span>
+    <ul>
+      <li><strong>A tríade CIA vale para LLMs.</strong> Vazar o prompt de sistema ou os dados do contexto fere a confidencialidade; envenenar os dados de treino fere a integridade; deixar qualquer um disparar consultas caras sem limite fere a disponibilidade (e a fatura).</li>
+      <li><strong>Menor privilégio vale para agentes.</strong> Um agente de IA com acesso a ferramentas é um usuário como outro qualquer: dê só as permissões que a tarefa exige e peça aprovação humana para ações destrutivas.</li>
+      <li><strong>Segredo e dado pessoal ficam fora do chat.</strong> Colar chave de API, código da empresa ou dado de cliente num chatbot externo é vazamento, e com dado pessoal entra a LGPD.</li>
+      <li><strong>O modelo não é fronteira de segurança.</strong> Uma instrução no prompt ("nunca revele X") não substitui controle de acesso no código.</li>
+    </ul>
+    <p>Mais em <a href="09-sdlc-e-ia.html">SDLC seguro e IA</a>.</p>
+  </div>
 
   <h2 id="checkpoint">Checkpoint</h2>
   <details><summary>Um atacante muda o campo <code>amount</code> de uma transferência no meio do caminho. Qual propriedade da tríade CIA foi quebrada?</summary><p>Integridade: o dado foi alterado sem autorização. Se ele só tivesse lido o valor, seria confidencialidade; se tivesse derrubado o serviço, disponibilidade.</p></details>

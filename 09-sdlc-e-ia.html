@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDLC seguro e IA · Trilha Sec</title>
+<meta name="description" content="O ciclo de vida do software com segurança em cada etapa, o que muda com assistentes e agentes de IA, o que a pesquisa mostra e leituras recomendadas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="top"><a class="brand" href="./">▲ trilha-sec</a><span><a href="./#mapa">mapa</a> · <a href="06-certificacoes.html">certificações</a> · <a href="https://github.com/ogatalars/trilha-sec">github</a></span></nav>
+<main>
+  <span class="chip">◆ Parte 1 · Essencial · 09</span>
+  <h1>SDLC seguro e IA</h1>
+  <p class="lead">Onde cada controle das páginas anteriores entra no ciclo de vida do software, e o que muda quando parte do código, da revisão e da operação passa a ser feita com IA.</p>
+
+  <h2 id="sdlc">O ciclo de vida seguro</h2>
+  <p>O <dfn>SDLC</dfn> (<em>Software Development Life Cycle</em>, ciclo de vida do desenvolvimento de software) é o caminho de uma mudança, da ideia até a produção, e de volta. Um SDLC seguro coloca uma atividade de segurança em cada etapa, em vez de deixar tudo para um teste no fim. A referência formal é o <a href="https://csrc.nist.gov/pubs/sp/800/218/final">NIST SSDF (SP 800-218)</a>; o diagrama abaixo é uma versão enxuta, com o que você viu nas páginas 01 a 05.</p>
+  <figure class="figure">
+    <div class="figure-wrap">
+<svg viewBox="0 0 820 640" role="img" aria-labelledby="sdlc-t sdlc-d" xmlns="http://www.w3.org/2000/svg">
+<title id="sdlc-t">Ciclo de vida seguro do software (SDLC), com o que muda com IA em cada etapa</title>
+<desc id="sdlc-d">Oito etapas em ciclo: requisitos, design, código, build, teste, deploy, operar e aprender. Cada etapa lista controles de segurança e, em destaque, o cuidado extra com IA. O que a operação aprende volta como requisito.</desc>
+<defs><marker id="sdlc-tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-tip" d="M0,0 L10,5 L0,10 z"/></marker><marker id="sdlc-tip-loop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-loop-tip" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-band" x="20" y="14" width="780" height="40" rx="10"/>
+<text class="dg-label" x="34" y="38">GOVERNANÇA</text>
+<text class="dg-muted" x="132" y="38">política, papéis, treinamento, métricas e uso aceitável de IA (no NIST CSF 2.0, a função Governar)</text>
+<rect class="dg-card" x="20" y="76" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="21" y="77" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="21" y="94" width="172" height="18"/>
+<line class="dg-rule" x1="20" y1="112" x2="194" y2="112"/>
+<text class="dg-num" x="32" y="99">01</text>
+<text class="dg-title" x="56" y="100">Requisitos</text>
+<circle class="dg-dot" cx="35" cy="130" r="2.5"/>
+<text class="dg-text" x="45" y="134">Requisitos de</text>
+<text class="dg-text" x="45" y="149">segurança (ASVS)</text>
+<circle class="dg-dot" cx="35" cy="168" r="2.5"/>
+<text class="dg-text" x="45" y="172">Dados sensíveis</text>
+<text class="dg-text" x="45" y="187">e LGPD</text>
+<circle class="dg-dot" cx="35" cy="206" r="2.5"/>
+<text class="dg-text" x="45" y="210">Casos de abuso</text>
+<line class="dg-rule" x1="32" y1="238" x2="182" y2="238"/>
+<circle class="dg-dot-ai" cx="35" cy="252" r="3"/>
+<text class="dg-ai" x="45" y="256">+ IA: política de uso</text>
+<text class="dg-ai" x="45" y="271">de IA e de dados</text>
+<text class="dg-label" x="32" y="292">págs. 01 · 03</text>
+<rect class="dg-card" x="222" y="76" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="223" y="77" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="223" y="94" width="172" height="18"/>
+<line class="dg-rule" x1="222" y1="112" x2="396" y2="112"/>
+<text class="dg-num" x="234" y="99">02</text>
+<text class="dg-title" x="258" y="100">Design</text>
+<circle class="dg-dot" cx="237" cy="130" r="2.5"/>
+<text class="dg-text" x="247" y="134">Threat model</text>
+<text class="dg-text" x="247" y="149">(STRIDE)</text>
+<circle class="dg-dot" cx="237" cy="168" r="2.5"/>
+<text class="dg-text" x="247" y="172">Menor privilégio</text>
+<text class="dg-text" x="247" y="187">e defesa em camadas</text>
+<circle class="dg-dot" cx="237" cy="206" r="2.5"/>
+<text class="dg-text" x="247" y="210">Revisão de</text>
+<text class="dg-text" x="247" y="225">arquitetura</text>
+<line class="dg-rule" x1="234" y1="238" x2="384" y2="238"/>
+<circle class="dg-dot-ai" cx="237" cy="252" r="3"/>
+<text class="dg-ai" x="247" y="256">+ IA: threat model</text>
+<text class="dg-ai" x="247" y="271">com LLM e agentes</text>
+<text class="dg-label" x="234" y="292">pág. 03</text>
+<rect class="dg-card" x="424" y="76" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="425" y="77" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="425" y="94" width="172" height="18"/>
+<line class="dg-rule" x1="424" y1="112" x2="598" y2="112"/>
+<text class="dg-num" x="436" y="99">03</text>
+<text class="dg-title" x="460" y="100">Código</text>
+<circle class="dg-dot" cx="439" cy="130" r="2.5"/>
+<text class="dg-text" x="449" y="134">Revisão de código</text>
+<text class="dg-text" x="449" y="149">em todo PR</text>
+<circle class="dg-dot" cx="439" cy="168" r="2.5"/>
+<text class="dg-text" x="449" y="172">Secret scanning</text>
+<text class="dg-text" x="449" y="187">no pre-commit</text>
+<circle class="dg-dot" cx="439" cy="206" r="2.5"/>
+<text class="dg-text" x="449" y="210">SAST no editor</text>
+<text class="dg-text" x="449" y="225">e no PR</text>
+<line class="dg-rule" x1="436" y1="238" x2="586" y2="238"/>
+<circle class="dg-dot-ai" cx="439" cy="252" r="3"/>
+<text class="dg-ai" x="449" y="256">+ IA: revisar o código</text>
+<text class="dg-ai" x="449" y="271">gerado como o seu</text>
+<text class="dg-label" x="436" y="292">págs. 03 · 04</text>
+<rect class="dg-card" x="626" y="76" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="627" y="77" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="627" y="94" width="172" height="18"/>
+<line class="dg-rule" x1="626" y1="112" x2="800" y2="112"/>
+<text class="dg-num" x="638" y="99">04</text>
+<text class="dg-title" x="662" y="100">Build</text>
+<circle class="dg-dot" cx="641" cy="130" r="2.5"/>
+<text class="dg-text" x="651" y="134">SCA e SBOM</text>
+<circle class="dg-dot" cx="641" cy="153" r="2.5"/>
+<text class="dg-text" x="651" y="157">Container scanning</text>
+<circle class="dg-dot" cx="641" cy="176" r="2.5"/>
+<text class="dg-text" x="651" y="180">Assinatura e</text>
+<text class="dg-text" x="651" y="195">proveniência (SLSA)</text>
+<line class="dg-rule" x1="638" y1="238" x2="788" y2="238"/>
+<circle class="dg-dot-ai" cx="641" cy="252" r="3"/>
+<text class="dg-ai" x="651" y="256">+ IA: conferir pacotes</text>
+<text class="dg-ai" x="651" y="271">sugeridos pela IA</text>
+<text class="dg-label" x="638" y="292">pág. 04</text>
+<rect class="dg-card" x="626" y="350" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="627" y="351" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="627" y="368" width="172" height="18"/>
+<line class="dg-rule" x1="626" y1="386" x2="800" y2="386"/>
+<text class="dg-num" x="638" y="373">05</text>
+<text class="dg-title" x="662" y="374">Teste</text>
+<circle class="dg-dot" cx="641" cy="404" r="2.5"/>
+<text class="dg-text" x="651" y="408">DAST em staging</text>
+<circle class="dg-dot" cx="641" cy="427" r="2.5"/>
+<text class="dg-text" x="651" y="431">Testes de segurança</text>
+<text class="dg-text" x="651" y="446">automatizados</text>
+<circle class="dg-dot" cx="641" cy="465" r="2.5"/>
+<text class="dg-text" x="651" y="469">Pentest antes de</text>
+<text class="dg-text" x="651" y="484">release importante</text>
+<line class="dg-rule" x1="638" y1="512" x2="788" y2="512"/>
+<circle class="dg-dot-ai" cx="641" cy="526" r="3"/>
+<text class="dg-ai" x="651" y="530">+ IA: testar prompt</text>
+<text class="dg-ai" x="651" y="545">injection e saídas</text>
+<text class="dg-label" x="638" y="566">págs. 03 · 04</text>
+<rect class="dg-card" x="424" y="350" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="425" y="351" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="425" y="368" width="172" height="18"/>
+<line class="dg-rule" x1="424" y1="386" x2="598" y2="386"/>
+<text class="dg-num" x="436" y="373">06</text>
+<text class="dg-title" x="460" y="374">Deploy</text>
+<circle class="dg-dot" cx="439" cy="404" r="2.5"/>
+<text class="dg-text" x="449" y="408">IaC scanning</text>
+<circle class="dg-dot" cx="439" cy="427" r="2.5"/>
+<text class="dg-text" x="449" y="431">Verificar assinatura</text>
+<text class="dg-text" x="449" y="446">e admission control</text>
+<circle class="dg-dot" cx="439" cy="465" r="2.5"/>
+<text class="dg-text" x="449" y="469">Segredos no cofre,</text>
+<text class="dg-text" x="449" y="484">não na imagem</text>
+<line class="dg-rule" x1="436" y1="512" x2="586" y2="512"/>
+<circle class="dg-dot-ai" cx="439" cy="526" r="3"/>
+<text class="dg-ai" x="449" y="530">+ IA: agentes com</text>
+<text class="dg-ai" x="449" y="545">permissão mínima</text>
+<text class="dg-label" x="436" y="566">pág. 04</text>
+<rect class="dg-card" x="222" y="350" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="223" y="351" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="223" y="368" width="172" height="18"/>
+<line class="dg-rule" x1="222" y1="386" x2="396" y2="386"/>
+<text class="dg-num" x="234" y="373">07</text>
+<text class="dg-title" x="258" y="374">Operar</text>
+<circle class="dg-dot" cx="237" cy="404" r="2.5"/>
+<text class="dg-text" x="247" y="408">Logs no SIEM e</text>
+<text class="dg-text" x="247" y="423">detecção (Sigma)</text>
+<circle class="dg-dot" cx="237" cy="442" r="2.5"/>
+<text class="dg-text" x="247" y="446">Resposta a</text>
+<text class="dg-text" x="247" y="461">incidentes</text>
+<circle class="dg-dot" cx="237" cy="480" r="2.5"/>
+<text class="dg-text" x="247" y="484">Patch e re-scan</text>
+<text class="dg-text" x="247" y="499">contínuo</text>
+<line class="dg-rule" x1="234" y1="512" x2="384" y2="512"/>
+<circle class="dg-dot-ai" cx="237" cy="526" r="3"/>
+<text class="dg-ai" x="247" y="530">+ IA: registrar uso</text>
+<text class="dg-ai" x="247" y="545">de modelos; ATLAS</text>
+<text class="dg-label" x="234" y="566">pág. 05</text>
+<rect class="dg-card" x="20" y="350" width="174" height="226" rx="10"/>
+<rect class="dg-loop" x="20" y="350" width="174" height="226" rx="10"/>
+<rect class="dg-head" x="21" y="351" width="172" height="35" rx="9"/>
+<rect class="dg-head" x="21" y="368" width="172" height="18"/>
+<line class="dg-rule" x1="20" y1="386" x2="194" y2="386"/>
+<text class="dg-num" x="32" y="373">↺</text>
+<text class="dg-title" x="56" y="374">Aprender</text>
+<circle class="dg-dot" cx="35" cy="404" r="2.5"/>
+<text class="dg-text" x="45" y="408">Incidentes, achados</text>
+<text class="dg-text" x="45" y="423">e postmortems</text>
+<circle class="dg-dot" cx="35" cy="442" r="2.5"/>
+<text class="dg-text" x="45" y="446">viram requisitos e</text>
+<text class="dg-text" x="45" y="461">detecções novas</text>
+<line class="dg-rule" x1="32" y1="512" x2="182" y2="512"/>
+<circle class="dg-dot-ai" cx="35" cy="526" r="3"/>
+<text class="dg-ai" x="45" y="530">+ IA: exercícios de</text>
+<text class="dg-ai" x="45" y="545">incidente com IA</text>
+<text class="dg-label" x="32" y="566">pág. 05</text>
+<line class="dg-arrow" x1="196" y1="189" x2="220" y2="189" marker-end="url(#sdlc-tip)"/>
+<line class="dg-arrow" x1="398" y1="189" x2="422" y2="189" marker-end="url(#sdlc-tip)"/>
+<line class="dg-arrow" x1="600" y1="189" x2="624" y2="189" marker-end="url(#sdlc-tip)"/>
+<line class="dg-arrow" x1="713" y1="304" x2="713" y2="348" marker-end="url(#sdlc-tip)"/>
+<line class="dg-arrow" x1="624" y1="463" x2="600" y2="463" marker-end="url(#sdlc-tip)"/>
+<line class="dg-arrow" x1="422" y1="463" x2="398" y2="463" marker-end="url(#sdlc-tip)"/>
+<line class="dg-loop" x1="220" y1="463" x2="196" y2="463" marker-end="url(#sdlc-tip-loop)"/>
+<line class="dg-loop" x1="107" y1="348" x2="107" y2="304" marker-end="url(#sdlc-tip-loop)"/>
+<line class="dg-arrow" x1="20" y1="618" x2="50" y2="618"/>
+<text class="dg-muted" x="58" y="622">fluxo de uma mudança</text>
+<line class="dg-loop" x1="210" y1="618" x2="240" y2="618"/>
+<text class="dg-muted" x="248" y="622">o que volta da operação para o começo do ciclo</text>
+<circle class="dg-dot-ai" cx="560" cy="618" r="3"/>
+<text class="dg-ai" x="570" y="622">o que muda com IA em cada etapa</text>
+</svg>
+    </div>
+    <figcaption>O ciclo seguro em oito etapas. Em cada uma, os controles clássicos e, em azul, o cuidado a mais quando há IA no meio. No celular, arraste para o lado para ver o diagrama inteiro.</figcaption>
+  </figure>
+  <p>Três coisas para notar no desenho:</p>
+  <ul>
+    <li><strong>Cada etapa tem o seu controle.</strong> Um threat model no design custa uma reunião; a mesma falha achada em produção vira incidente.</li>
+    <li><strong>O ciclo fecha.</strong> O que a operação aprende (um incidente, um achado de pentest, um alerta que se repete) volta como requisito e como detecção nova. Sem essa volta, o time corrige o mesmo erro várias vezes.</li>
+    <li><strong>A IA aparece em todas as etapas</strong>, dentro do mesmo ciclo: há mais coisas para proteger e mais ajuda para fazer isso.</li>
+  </ul>
+
+  <h2 id="antes-depois">Antes e depois da IA</h2>
+  <p>O segundo diagrama compara as etapas como eram e como ficam com assistentes de código e agentes no meio. À esquerda, o problema clássico; à direita, o risco novo e o controle que responde a ele.</p>
+  <figure class="figure">
+    <div class="figure-wrap">
+<svg viewBox="0 0 820 750" role="img" aria-labelledby="ia-t ia-d" xmlns="http://www.w3.org/2000/svg">
+<title id="ia-t">O ciclo de vida do software antes e depois da IA</title>
+<desc id="ia-d">Seis etapas comparadas. À esquerda, o problema clássico; à direita, o risco novo trazido por assistentes e agentes de IA e o controle que responde a ele. Na base, o que não muda: os fundamentos.</desc>
+<rect class="dg-band" x="20" y="14" width="780" height="36" rx="8"/>
+<text class="dg-label" x="34" y="37">ETAPA</text>
+<text class="dg-label" x="178" y="37">ANTES DA IA</text>
+<text class="dg-label-ai" x="504" y="37">COM IA: RISCO NOVO E CONTROLE</text>
+<line class="dg-rule" x1="164" y1="62" x2="164" y2="662"/>
+<line class="dg-rule" x1="490" y1="62" x2="490" y2="662"/>
+<text class="dg-num" x="34" y="84">01</text>
+<text class="dg-title" x="34" y="104">Escrever código</text>
+<text class="dg-text" x="178" y="88">Pessoas escrevem; copiam trechos de fórum</text>
+<text class="dg-text" x="178" y="104">e da documentação. Revisão por pares.</text>
+<text class="dg-bad" x="504" y="84"><tspan class="dg-strong">Risco:</tspan> cerca de 40% do código gerado em</text>
+<text class="dg-bad" x="504" y="99">cenários de risco era vulnerável, e quem</text>
+<text class="dg-bad" x="504" y="114">usa assistente confia mais no resultado.</text>
+<text class="dg-ok" x="504" y="133"><tspan class="dg-strong">Controle:</tspan> mesma revisão, SAST e uma pessoa</text>
+<text class="dg-ok" x="504" y="148">responsável pelo merge.</text>
+<line class="dg-rule" x1="20" y1="162" x2="800" y2="162"/>
+<text class="dg-num" x="34" y="184">02</text>
+<text class="dg-title" x="34" y="204">Dependências</text>
+<text class="dg-text" x="178" y="188">Typosquatting: pacote com nome parecido</text>
+<text class="dg-text" x="178" y="204">com o de um popular (reqeusts).</text>
+<text class="dg-bad" x="504" y="184"><tspan class="dg-strong">Risco:</tspan> o modelo sugere pacote que não existe</text>
+<text class="dg-bad" x="504" y="199">e o atacante registra o nome</text>
+<text class="dg-bad" x="504" y="214">(slopsquatting; 19,7% em um estudo).</text>
+<text class="dg-ok" x="504" y="233"><tspan class="dg-strong">Controle:</tspan> SCA no PR; conferir se o pacote existe</text>
+<text class="dg-ok" x="504" y="248">e quem publica.</text>
+<line class="dg-rule" x1="20" y1="262" x2="800" y2="262"/>
+<text class="dg-num" x="34" y="284">03</text>
+<text class="dg-title" x="34" y="304">Entrada não</text>
+<text class="dg-title" x="34" y="322">confiável</text>
+<text class="dg-text" x="178" y="288">SQL injection e XSS: o dado do usuário</text>
+<text class="dg-text" x="178" y="304">vira comando ou HTML.</text>
+<text class="dg-bad" x="504" y="284"><tspan class="dg-strong">Risco:</tspan> prompt injection direta e indireta,</text>
+<text class="dg-bad" x="504" y="299">com texto escondido em PDF, página ou</text>
+<text class="dg-bad" x="504" y="314">e-mail que o modelo lê.</text>
+<text class="dg-ok" x="504" y="333"><tspan class="dg-strong">Controle:</tspan> saída do modelo é entrada não</text>
+<text class="dg-ok" x="504" y="348">confiável; escapar, validar, não executar.</text>
+<line class="dg-rule" x1="20" y1="362" x2="800" y2="362"/>
+<text class="dg-num" x="34" y="384">04</text>
+<text class="dg-title" x="34" y="404">Permissões</text>
+<text class="dg-text" x="178" y="388">Contas de serviço e token do CI com</text>
+<text class="dg-text" x="178" y="404">privilégio mínimo.</text>
+<text class="dg-bad" x="504" y="384"><tspan class="dg-strong">Risco:</tspan> agente com ferramentas demais</text>
+<text class="dg-bad" x="504" y="399">(agência excessiva) e servidores MCP</text>
+<text class="dg-bad" x="504" y="414">de terceiros sem revisão.</text>
+<text class="dg-ok" x="504" y="433"><tspan class="dg-strong">Controle:</tspan> menor privilégio, sandbox e</text>
+<text class="dg-ok" x="504" y="448">aprovação humana para ação destrutiva.</text>
+<line class="dg-rule" x1="20" y1="462" x2="800" y2="462"/>
+<text class="dg-num" x="34" y="484">05</text>
+<text class="dg-title" x="34" y="504">Segredos e dados</text>
+<text class="dg-text" x="178" y="488">Segredo commitado no git; o secret</text>
+<text class="dg-text" x="178" y="504">scanning resolve boa parte.</text>
+<text class="dg-bad" x="504" y="484"><tspan class="dg-strong">Risco:</tspan> segredo e dado pessoal colados no</text>
+<text class="dg-bad" x="504" y="499">prompt; código enviado a IA externa</text>
+<text class="dg-bad" x="504" y="514">por conta pessoal.</text>
+<text class="dg-ok" x="504" y="533"><tspan class="dg-strong">Controle:</tspan> política de uso de IA, DLP e scanner</text>
+<text class="dg-ok" x="504" y="548">nos arquivos de contexto do agente.</text>
+<line class="dg-rule" x1="20" y1="562" x2="800" y2="562"/>
+<text class="dg-num" x="34" y="584">06</text>
+<text class="dg-title" x="34" y="604">Operação e SOC</text>
+<text class="dg-text" x="178" y="588">Analista tria alertas; a maioria vem de</text>
+<text class="dg-text" x="178" y="604">comportamento legítimo.</text>
+<text class="dg-bad" x="504" y="584"><tspan class="dg-strong">Risco:</tspan> LLM erra com confiança e lê texto</text>
+<text class="dg-bad" x="504" y="599">plantado em log; chave roubada usada</text>
+<text class="dg-bad" x="504" y="614">para chamar modelos (LLMjacking).</text>
+<text class="dg-ok" x="504" y="633"><tspan class="dg-strong">Controle:</tspan> uma pessoa decide a contenção;</text>
+<text class="dg-ok" x="504" y="648">registrar o uso de IA; MITRE ATLAS.</text>
+<rect class="dg-band" x="20" y="676" width="780" height="58" rx="8"/>
+<text class="dg-label" x="34" y="701">O QUE NÃO MUDA</text>
+<text class="dg-text" x="178" y="700">Autenticação, autorização, validação de entrada, menor privilégio, logs e resposta</text>
+<text class="dg-text" x="178" y="717">a incidente continuam sendo a base. A IA acelera quem já domina o básico.</text>
+</svg>
+    </div>
+    <figcaption>Os números vêm dos estudos da seção seguinte. No celular, arraste para o lado para ver o diagrama inteiro.</figcaption>
+  </figure>
+  <div class="callout dev">
+    <span class="callout-title">Ponte com o que você já faz</span>
+    <p>Quase todo controle da coluna da direita já apareceu no guia: revisão de código, SCA, menor privilégio, escapar a saída, secret scanning, logs. A IA muda por onde a falha entra; a defesa continua vindo do básico bem feito.</p>
+  </div>
+
+  <h2 id="pesquisa">O que a pesquisa já mostrou</h2>
+  <p>Alguns estudos ajudam a calibrar quanto confiar na IA. Todos estão com link na lista de leituras, no fim da página.</p>
+  <ul>
+    <li><strong>Código de assistente tem falha.</strong> Pearce e colegas (IEEE S&amp;P 2022) pediram ao Copilot código para cenários ligados ao CWE Top 25: cerca de 40% dos 1.689 programas gerados eram vulneráveis.</li>
+    <li><strong>E quem usa confia mais.</strong> No estudo de Perry e colegas (ACM CCS 2023), quem tinha o assistente escreveu código menos seguro e saiu mais confiante de que estava seguro.</li>
+    <li><strong>Agentes também erram.</strong> Num benchmark com 186 tarefas de repositórios reais (ICML 2026), o melhor agente acertou a funcionalidade em 57% das vezes, mas só 11,8% das soluções eram seguras.</li>
+    <li><strong>Pacotes inventados.</strong> Spracklen e colegas (USENIX Security 2025) mediram que 19,7% dos pacotes sugeridos por modelos não existiam: 205.474 nomes únicos que qualquer um poderia registrar.</li>
+    <li><strong>O modelo não separa dado de instrução.</strong> Greshake e colegas (AISec 2023) mostraram injeção indireta em aplicações reais: o ataque chega pelo conteúdo que o próprio sistema busca.</li>
+    <li><strong>LLM como revisor ainda falha.</strong> Ullah e colegas (IEEE S&amp;P 2024) viram a resposta dos modelos sobre a mesma vulnerabilidade mudar em 17% a 26% dos casos só porque as variáveis foram renomeadas.</li>
+  </ul>
+
+  <h2 id="mercado">O mercado em 2026</h2>
+  <div class="callout ia">
+    <span class="callout-title">Números para calibrar a expectativa</span>
+    <ul>
+      <li>IA é a habilidade mais citada como necessidade urgente: 41% no <a href="https://www.isc2.org/Insights/2025/12/2025-ISC2-Cybersecurity-Workforce-Study">ISC2 Workforce Study 2025</a>, que também registra 39% das organizações com contratações congeladas.</li>
+      <li>Numa <a href="https://www.isc2.org/Insights/2026/07/rethinking-ai-impact-on-cybersecurity-roles">pesquisa da ISC2 de julho de 2026</a>, feita só com profissionais que usam IA, 56% disseram que a IA reduziu a necessidade de vagas de entrada, e 53% que ela está criando novos tipos de vaga de entrada.</li>
+      <li>No <a href="https://reports.weforum.org/docs/WEF_Global_Cybersecurity_Outlook_2026.pdf">WEF Global Cybersecurity Outlook 2026</a>, 64% das organizações já avaliam a segurança de uma ferramenta de IA antes de usá-la (eram 37% no ano anterior).</li>
+      <li>No <a href="https://www.verizon.com/business/resources/T343/reports/2026-dbir-data-breach-investigations-report.pdf">Verizon DBIR 2026</a>, explorar vulnerabilidade foi a forma de entrada mais comum (31%), e código-fonte foi o dado mais enviado a serviços de IA externos.</li>
+      <li>No Brasil, o <a href="https://brasscom.org.br/wp-content/uploads/2026/10/BRI2-2026-018-Relatorio-de-Ciberseguranca-v30.pdf">relatório de cibersegurança 2026 da Brasscom</a> mostra o emprego formal em segurança crescendo 18,6% ao ano entre 2019 e 2025. O próprio relatório avisa que a contagem subestima o total.</li>
+    </ul>
+    <p>Para quem está começando: a vaga de entrada que só tria alerta está encolhendo, e quem sabe conferir o que a IA entrega ganha espaço. Conferir exige o básico das páginas 01 a 05. E proteger aplicações com LLM e agentes é uma área com demanda e pouca gente.</p>
+  </div>
+
+  <h2 id="leituras">Leituras recomendadas</h2>
+  <p>Artigos científicos e documentos de referência, todos com acesso gratuito. <span class="tag lvl-1">iniciante</span> dá para ler logo depois deste guia; <span class="tag lvl-2">intermediário</span> pede um pouco mais de base. Os dois <em>preprints</em> ainda não passaram por revisão por pares.</p>
+  <h3>Fundamentos</h3>
+  <ul>
+    <li><a href="https://web.mit.edu/Saltzer/www/publications/protection/">The Protection of Information in Computer Systems</a>. Saltzer e Schroeder, <em>Proceedings of the IEEE</em>, 1975. <span class="tag lvl-1">iniciante</span> Leia a seção "Basic Principles": menor privilégio, padrão seguro e mediação completa explicam até falhas de agentes de IA.</li>
+    <li><a href="https://www.cl.cam.ac.uk/~rja14/book.html">Security Engineering, 3ª edição</a>. Ross Anderson, Wiley, 2020 (capítulos gratuitos). <span class="tag lvl-1">iniciante</span> Capítulos 1 a 3 e 27: pensar em adversário, incentivos e usabilidade antes de pensar em ferramenta.</li>
+    <li><a href="https://www.usenix.org/legacy/events/sec99/full_papers/whitten/whitten.pdf">Why Johnny Can't Encrypt</a>. Whitten e Tygar, USENIX Security, 1999. <span class="tag lvl-1">iniciante</span> Segurança que o usuário não consegue operar não protege ninguém.</li>
+    <li><a href="https://pages.nist.gov/800-63-4/sp800-63b.html">NIST SP 800-63B-4: Authentication and Authenticator Management</a>. NIST, 2025. <span class="tag lvl-1">iniciante</span> As regras atuais de senha, MFA e sessão, direto da fonte.</li>
+  </ul>
+  <h3>AppSec e código com IA</h3>
+  <ul>
+    <li><a href="https://www.ieee-security.org/TC/SP2016/papers/0824a289.pdf">You Get Where You're Looking For: The Impact of Information Sources on Code Security</a>. Acar e colegas, IEEE S&amp;P, 2016. <span class="tag lvl-1">iniciante</span> A fonte que você consulta muda a segurança do seu código. Hoje a fonte é muitas vezes um assistente de IA.</li>
+    <li><a href="https://arxiv.org/abs/1710.03135">Stack Overflow Considered Harmful? The Impact of Copy&amp;Paste on Android Application Security</a>. Fischer e colegas, IEEE S&amp;P, 2017. <span class="tag lvl-1">iniciante</span> Trecho copiado vira vulnerabilidade em escala: 15,4% de 1,3 milhão de apps tinham código de segurança copiado do Stack Overflow, quase sempre com algum trecho inseguro.</li>
+    <li><a href="https://arxiv.org/abs/2108.09293">Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions</a>. Pearce e colegas, IEEE S&amp;P, 2022. <span class="tag lvl-1">iniciante</span> Cerca de 40% do código gerado em cenários de risco era vulnerável.</li>
+    <li><a href="https://arxiv.org/abs/2211.03622">Do Users Write More Insecure Code with AI Assistants?</a>. Perry e colegas, ACM CCS, 2023. <span class="tag lvl-1">iniciante</span> Com o assistente, o código saiu menos seguro e as pessoas, mais confiantes.</li>
+    <li><a href="https://arxiv.org/abs/2512.03262">Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks</a>. Zhao e colegas, ICML, 2026. <span class="tag lvl-2">intermediário</span> Agentes que acertam a funcionalidade e erram a segurança, em tarefas de repositórios reais.</li>
+    <li><a href="https://arxiv.org/abs/2312.12575">LLMs Cannot Reliably Identify and Reason About Security Vulnerabilities (Yet?)</a>. Ullah e colegas, IEEE S&amp;P, 2024. <span class="tag lvl-2">intermediário</span> Por que um LLM serve para triagem, mas não como juiz final de uma vulnerabilidade.</li>
+  </ul>
+  <h3>Segurança de IA e LLMs</h3>
+  <ul>
+    <li><a href="https://genai.owasp.org/top-10-for-llm-applications-2026/">OWASP Top 10 para aplicações com LLM, edição 2026</a>. OWASP GenAI Security Project, 2026. <span class="tag lvl-1">iniciante</span> O vocabulário comum da área, como o Top 10 é para aplicações web.</li>
+    <li><a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/">OWASP Top 10 for Agentic Applications</a>. OWASP GenAI Security Project, 2025. <span class="tag lvl-1">iniciante</span> Os riscos próprios de agentes que usam ferramentas.</li>
+    <li><a href="https://atlas.mitre.org/">MITRE ATLAS</a>. MITRE, base atualizada continuamente. <span class="tag lvl-1">iniciante</span> O "ATT&amp;CK da IA": táticas e técnicas contra sistemas de IA, para threat model e detecção.</li>
+    <li><a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development">Guidelines for Secure AI System Development</a>. NCSC (Reino Unido), CISA (EUA) e parceiros, 2023. <span class="tag lvl-1">iniciante</span> Documento curto que cobre design, desenvolvimento, deploy e operação de sistemas de IA.</li>
+    <li><a href="https://arxiv.org/abs/2302.12173">Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection</a>. Greshake e colegas, ACM AISec, 2023. <span class="tag lvl-1">iniciante</span> O artigo que mostrou a injeção indireta em aplicações reais.</li>
+    <li><a href="https://arxiv.org/abs/2302.10149">Poisoning Web-Scale Training Datasets is Practical</a>. Carlini e colegas, IEEE S&amp;P, 2024. <span class="tag lvl-2">intermediário</span> Envenenar dados de treino é barato: cadeia de suprimentos, versão dados.</li>
+    <li><a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-2e2025.pdf">NIST AI 100-2 E2025: Adversarial Machine Learning</a>. NIST, 2025. <span class="tag lvl-2">intermediário</span> Taxonomia oficial de ataques e mitigações; bom para consulta.</li>
+    <li><a href="https://arxiv.org/abs/2506.08837">Design Patterns for Securing LLM Agents against Prompt Injections</a>. Beurer-Kellner e colegas, 2025 (<em>preprint</em>). <span class="tag lvl-2">intermediário</span> Padrões de arquitetura que resistem a injeção, com o custo de cada um.</li>
+    <li><a href="https://arxiv.org/abs/2510.16558">A First Look at the Security Issues in the Model Context Protocol Ecosystem</a>. Li e Gao, IEEE DSN, 2026. <span class="tag lvl-2">intermediário</span> Servidores MCP vistos como cadeia de suprimentos: 833 vulneráveis entre mais de 67 mil analisados.</li>
+  </ul>
+  <h3>DevSecOps e cadeia de suprimentos</h3>
+  <ul>
+    <li><a href="https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_paper.pdf">How Bad Can It Git? Characterizing Secret Leakage in Public GitHub Repositories</a>. Meli, McNiece e Reaves, NDSS, 2019. <span class="tag lvl-1">iniciante</span> Por que secret scanning e rotação de chave não são exagero.</li>
+    <li><a href="https://www.usenix.org/system/files/usenixsecurity25-spracklen.pdf">We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs</a>. Spracklen e colegas, USENIX Security, 2025. <span class="tag lvl-1">iniciante</span> O estudo dos pacotes inventados por modelos de código.</li>
+    <li><a href="https://arxiv.org/abs/2204.04008">SoK: Taxonomy of Attacks on Open-Source Software Supply Chains</a>. Ladisa e colegas, IEEE S&amp;P, 2023. <span class="tag lvl-2">intermediário</span> O mapa completo de como se ataca a cadeia de suprimentos, com incidentes reais.</li>
+  </ul>
+  <h3>Blue Team</h3>
+  <ul>
+    <li><a href="https://attack.mitre.org/docs/ATTACK_Design_and_Philosophy_March_2020.pdf">MITRE ATT&amp;CK: Design and Philosophy</a>. Strom e colegas, MITRE, 2018 (revisado em 2020). <span class="tag lvl-1">iniciante</span> A lógica por trás de táticas e técnicas, e como usá-la em detecção.</li>
+    <li><a href="https://www.usenix.org/system/files/sec22-alahmadi.pdf">99% False Positives: A Qualitative Study of SOC Analysts' Perspectives on Security Alarms</a>. Alahmadi, Axon e Martinovic, USENIX Security, 2022. <span class="tag lvl-1">iniciante</span> Por que contexto e ajuste de regra pesam mais que ferramenta nova.</li>
+    <li><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf">NIST SP 800-61 Rev. 3: Incident Response Recommendations</a>. NIST, 2025. <span class="tag lvl-1">iniciante</span> Resposta a incidente organizada pelas funções do CSF 2.0.</li>
+    <li><a href="https://arxiv.org/abs/2508.18947">LLMs in the SOC: An Empirical Study of Human-AI Collaboration in Security Operations Centres</a>. Singh e colegas, 2025 (<em>preprint</em>). <span class="tag lvl-1">iniciante</span> Dez meses de uso real: o LLM ajuda a interpretar e a escrever; a decisão ficou com o analista.</li>
+  </ul>
+
+  <h2 id="checkpoint">Checkpoint</h2>
+  <details><summary>Em que etapa do ciclo o threat model rende mais, e por quê?</summary><p>No design. Antes de existir código, mudar o desenho custa uma conversa; depois que a falha está em produção, custa um incidente e uma refatoração.</p></details>
+  <details><summary>Um assistente de código sugeriu instalar um pacote que você nunca viu. O que conferir antes?</summary><p>Se o pacote existe no registro oficial, quem publica, há quanto tempo e com que histórico. Modelos inventam nomes de pacote, e atacantes registram esses nomes (slopsquatting). O SCA no PR é a rede de proteção.</p></details>
+  <details><summary>Por que a saída de um LLM deve ser tratada como entrada não confiável?</summary><p>Porque ela pode carregar texto controlado pelo atacante, vindo de injeção indireta num documento ou página que o modelo leu. Inserida em HTML, SQL ou num comando, vira XSS ou injeção. Escape, valide e nunca execute direto.</p></details>
+  <details><summary>O que muda e o que não muda no ciclo de vida com IA?</summary><p>Muda por onde a falha entra: código gerado, pacotes sugeridos, prompts, agentes com ferramentas. Não muda a defesa: revisão, menor privilégio, validação, logs e resposta a incidente continuam sendo a base.</p></details>
+
+  <nav class="pager"><a href="08-estudo-gratuito.html">← Estudar de graça</a><a href="./">Voltar ao mapa →</a></nav>
+</main>
+<p class="foot">Material aberto (CC BY 4.0) · feito por <a href="https://ogatalars.github.io/">Felipe Ogata</a> · sem rastreadores</p>
+</body>
+</html>

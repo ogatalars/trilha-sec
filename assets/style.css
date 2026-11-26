@@ -2,7 +2,7 @@
 :root {
   --bg: #f5f4ee; --panel: #ffffff; --fg: #1f1e1d; --muted: #6b6a65; --accent: #c15f3c;
   --line: #e6e3d8; --tag: #f0eee6; --code-bg: #f7f6f1;
-  --ok: #2f6b4f; --warn: #a3621b; --bad: #a33a2f;
+  --ok: #2f6b4f; --warn: #a3621b; --bad: #a33a2f; --ai: #4a55c4;
   --serif: "Source Serif 4", Georgia, serif;
   --sans: "Inter", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
@@ -12,14 +12,14 @@
   :root:not([data-theme="light"]) {
     --bg: #1f1e1d; --panel: #262624; --fg: #f0eee6; --muted: #a3a199; --accent: #d97757;
     --line: #3a3936; --tag: #33322f; --code-bg: #2b2a27;
-    --ok: #6fb592; --warn: #d9a05b; --bad: #e07a6e;
+    --ok: #6fb592; --warn: #d9a05b; --bad: #e07a6e; --ai: #a3abf7;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #1f1e1d; --panel: #262624; --fg: #f0eee6; --muted: #a3a199; --accent: #d97757;
   --line: #3a3936; --tag: #33322f; --code-bg: #2b2a27;
-  --ok: #6fb592; --warn: #d9a05b; --bad: #e07a6e;
+  --ok: #6fb592; --warn: #d9a05b; --bad: #e07a6e; --ai: #a3abf7;
   color-scheme: dark;
 }
 
@@ -89,6 +89,8 @@ th { font: 600 .78rem/1.3 var(--mono); text-transform: uppercase; letter-spacing
 .callout > :last-child { margin-bottom: 0; }
 .callout.dev { border-left-color: var(--ok); }
 .callout.warn { border-left-color: var(--warn); }
+/* "E com IA?": o mesmo assunto da página, visto com IA no meio */
+.callout.ia { border-left-color: var(--ai); }
 .callout-title { font: 600 .78rem/1 var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); display: block; margin-bottom: 6px; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 1.2em 0; }
@@ -110,6 +112,34 @@ details[open] summary { margin-bottom: 6px; }
 
 .pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 2.4em; padding-top: 1em; border-top: 1px solid var(--line); font-size: .95rem; }
 .foot { max-width: 860px; margin: 0 auto 40px; padding: 0 16px; text-align: center; color: var(--muted); font-size: .85rem; }
+
+/* diagramas em SVG inline: as cores vêm das variáveis, então seguem o tema claro/escuro */
+.figure { margin: 1.4em 0 1.8em; }
+.figure-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 12px; }
+.figure svg { display: block; width: 100%; height: auto; min-width: 680px; }
+.figure figcaption { font-size: .88rem; color: var(--muted); margin-top: .55em; max-width: 72ch; }
+.dg-card { fill: var(--panel); stroke: var(--line); stroke-width: 1; }
+.dg-head { fill: var(--tag); }
+.dg-band { fill: var(--tag); stroke: var(--line); stroke-width: 1; }
+.dg-rule { stroke: var(--line); stroke-width: 1; }
+.dg-title { fill: var(--fg); font-family: var(--serif); font-size: 15px; font-weight: 600; }
+.dg-num { fill: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 600; }
+.dg-label { fill: var(--muted); font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .06em; }
+.dg-text { fill: var(--fg); font-family: var(--sans); font-size: 12px; }
+.dg-muted { fill: var(--muted); font-family: var(--sans); font-size: 11.5px; }
+.dg-ai { fill: var(--ai); font-family: var(--sans); font-size: 11.5px; font-weight: 500; }
+.dg-bad { fill: var(--bad); font-family: var(--sans); font-size: 11.5px; }
+.dg-ok { fill: var(--ok); font-family: var(--sans); font-size: 11.5px; }
+.dg-strong { font-weight: 600; }
+.dg-label-ai { fill: var(--ai); font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .06em; }
+.dg-dot-ai { fill: var(--ai); }
+.dg-dot { fill: var(--accent); }
+.dg-arrow { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+.dg-tip { fill: var(--muted); }
+.dg-loop { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4; fill: none; }
+.dg-loop-tip { fill: var(--accent); }
+.dg-pill-bad { fill: none; stroke: var(--bad); stroke-width: 1; }
+.dg-pill-ok { fill: none; stroke: var(--ok); stroke-width: 1; }
 
 @media (max-width: 640px) {
   main { margin: 12px 8px 20px; padding: 6px 16px 20px; border-radius: 12px; }

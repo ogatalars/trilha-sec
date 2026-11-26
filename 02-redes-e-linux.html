@@ -156,7 +156,7 @@ $ chmod 600 app.env     <span class="c"># r=4 w=2 x=1 → 6=rw- para o dono, 0 p
   <p>Logs são a principal evidência do Blue Team (a equipe que defende e detecta). Os lugares mais importantes:</p>
   <ul>
     <li><code>/var/log/</code>: o diretório tradicional de logs.</li>
-    <li><code>/var/log/auth.log</code> (Debian/Ubuntu) ou <code>/var/log/secure</code> (RHEL/Fedora): logins, falhas de senha, uso de <code>sudo</code>, conexões SSH.</li>
+    <li><code>/var/log/auth.log</code> (Debian/Ubuntu, quando o <code>rsyslog</code> está instalado; desde o Debian 12 ele não vem por padrão e esses eventos ficam só no journal) ou <code>/var/log/secure</code> (RHEL/Fedora): logins, falhas de senha, uso de <code>sudo</code>, conexões SSH.</li>
     <li><code>journalctl</code>: lê o <dfn>journal</dfn> do systemd, o sistema de logs da maioria das distribuições atuais. <code>journalctl -u ssh</code> filtra por serviço; <code>--since "1 hour ago"</code> filtra por tempo.</li>
   </ul>
 
@@ -190,7 +190,7 @@ nmap -sV localhost
 
 <span class="c"># 5. Quem logou e quais tentativas de login houve</span>
 last -n 10
-sudo grep -i "failed\|accepted" /var/log/auth.log | tail -n 20
+sudo grep -i "failed\|accepted" /var/log/auth.log | tail -n 20   <span class="c"># sem esse arquivo? use a linha de baixo</span>
 journalctl -u ssh --since "24 hours ago"    <span class="c"># o serviço pode se chamar sshd</span>
 
 <span class="c"># 6. Procure binários SUID</span>
@@ -199,6 +199,16 @@ find / -perm -4000 -type f 2&gt;/dev/null
 <span class="c"># 7. Capture 20 pacotes de DNS enquanto roda um dig em outro terminal</span>
 sudo tcpdump -i any -n -c 20 port 53</code></pre>
   <p>Ao terminar, tente responder: alguma porta aberta no passo 3 te surpreendeu? Ela escuta em <code>127.0.0.1</code> (só local) ou em <code>0.0.0.0</code> (todas as interfaces, ou seja, acessível pela rede)? Essa distinção é exatamente o que separa um Redis inofensivo de um Redis exposto.</p>
+
+  <div class="callout ia">
+    <span class="callout-title">E com IA?</span>
+    <ul>
+      <li><strong>Agente que roda comandos é um processo com privilégio.</strong> Se um assistente de IA executa comandos de shell na sua máquina, vale o que você viu aqui: rode num container ou VM, com usuário próprio e sem <code>sudo</code>, e limite para onde ele pode se conectar.</li>
+      <li><strong>Servidor de IA local também é porta aberta.</strong> Um servidor <dfn>MCP</dfn> (<em>Model Context Protocol</em>, padrão para dar ferramentas a um modelo) ou uma API de modelo rodando na sua máquina e escutando em <code>0.0.0.0</code> fica acessível para a rede. Confira com o <code>ss -tulpn</code> do mini-lab e prefira <code>127.0.0.1</code>.</li>
+      <li><strong>Log do que o agente fez.</strong> Registre quais comandos e ferramentas o agente chamou, e com quais argumentos. Sem isso, não dá para investigar depois.</li>
+    </ul>
+    <p>Mais em <a href="09-sdlc-e-ia.html">SDLC seguro e IA</a>.</p>
+  </div>
 
   <h2 id="checkpoint">Checkpoint</h2>
   <details><summary>Qual a diferença prática entre TCP e UDP, e qual deles o DNS usa normalmente?</summary><p>TCP abre conexão (three-way handshake), garante entrega e ordem; UDP só envia, sem garantia, e por isso é mais leve. A maioria das consultas DNS usa UDP na porta 53, com TCP para respostas grandes e transferências de zona.</p></details>

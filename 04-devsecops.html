@@ -138,6 +138,7 @@ CMD ["main.py"]</span></code></pre>
   <ul>
     <li><dfn>Distroless</dfn>: imagens do Google que contêm só o runtime da linguagem, sem shell nem gerenciador de pacotes. Menos CVEs e, se alguém invadir o container, não tem <code>bash</code> nem <code>curl</code> à mão. Alternativas parecidas: Chainguard images, Alpine (menor, mas com shell).</li>
     <li><strong>Não-root</strong>: se o processo for comprometido, roda sem privilégios. Em Kubernetes, reforce com <code>runAsNonRoot: true</code>.</li>
+    <li><strong><code>.dockerignore</code></strong>: o <code>COPY . .</code> do estágio de build copia tudo o que está na pasta, inclusive <code>.env</code> e <code>.git</code>, e o <code>COPY --from=build /app /app</code> leva isso para a imagem final. Crie um <code>.dockerignore</code> com <code>.git</code>, <code>.env</code> e afins, ou copie só os arquivos da aplicação. E alinhe a versão do Python da imagem de build com a da imagem final, porque pacotes compilados dependem dela.</li>
     <li><strong>Fixar por digest</strong>: a tag <code>python:3.12</code> é um ponteiro que muda; o <dfn>digest</dfn> <code>sha256:...</code> é o hash do conteúdo e identifica exatamente uma imagem. Fixar por digest garante build reprodutível e impede que uma tag adulterada entre no seu build. O Dependabot e o Renovate atualizam digests automaticamente via PR. (Atenção: o caminho exato da imagem distroless de Python e suas variantes mudam com as versões do Debian; confira no repositório <code>GoogleContainerTools/distroless</code>.)</li>
   </ul>
 
@@ -162,13 +163,14 @@ CMD ["main.py"]</span></code></pre>
 <pre><code>cosign sign ghcr.io/org/app@sha256:&lt;digest&gt;
 
 cosign verify ghcr.io/org/app@sha256:&lt;digest&gt; \
-  --certificate-identity-regexp '^https://github.com/org/app/' \
+  --certificate-identity 'https://github.com/org/app/.github/workflows/release.yml@refs/heads/main' \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com</code></pre>
+  <p>Use a identidade exata, com o arquivo do workflow e a branch. Um regex aberto como <code>^https://github.com/org/app/</code> aceitaria a assinatura de qualquer workflow, em qualquer branch, desse repositório.</p>
 
   <h3>GitHub Actions: o próprio CI é superfície de ataque</h3>
   <p>O workflow do CI roda com acesso a segredos e permissão de escrita no repositório. Três cuidados resolvem a maior parte do risco:</p>
   <ol>
-    <li><strong>Fixar actions por SHA de commit.</strong> <code>uses: actions/checkout@v4</code> aponta para uma tag, e tags podem ser movidas por quem controla o repositório da action (foi o que aconteceu no caso tj-actions). O SHA completo do commit é imutável. Mantenha o comentário com a versão e deixe o Dependabot atualizar.</li>
+    <li><strong>Fixar actions por SHA de commit.</strong> <code>uses: actions/checkout@v4</code> aponta para uma tag, e tags podem ser movidas por quem controla o repositório da action (foi o que aconteceu no caso tj-actions, em 2025, e de novo em 19/03/2026 com o <code>aquasecurity/trivy-action</code>, a mesma action do exemplo abaixo: 76 das 77 tags foram reapontadas para código que roubava credenciais, e a própria Aqua escreveu que fixar pelo SHA completo é a única proteção confiável). O SHA completo do commit é imutável. Mantenha o comentário com a versão e deixe o Dependabot atualizar.</li>
     <li><strong>Privilégio mínimo no <code>GITHUB_TOKEN</code>.</strong> Todo job recebe um token automático; dependendo da configuração da organização, ele pode ter escrita em tudo. Declare <code>permissions:</code> no topo do workflow com o mínimo (em geral <code>contents: read</code>) e eleve só no job que precisa.</li>
     <li><strong>Cuidado com <code>pull_request_target</code>.</strong> Diferente de <code>pull_request</code>, esse evento roda no contexto do repositório de destino, <strong>com acesso a segredos e token com escrita</strong>, mesmo para PRs vindos de forks. Se o workflow fizer checkout do código do PR e executá-lo (instalar dependências, rodar testes, build), qualquer pessoa na internet abre um PR e roda código com seus segredos. Essa classe de ataque é chamada de "pwn request". Regra: não use <code>pull_request_target</code> para nada que execute código do PR.</li>
   </ol>
@@ -203,9 +205,10 @@ jobs:
       - uses: actions/checkout@&lt;SHA-de-40-caracteres&gt;   <span class="c"># v4</span>
         with:
           fetch-depth: 0      <span class="c"># histórico completo para varrer os commits do PR</span>
+          persist-credentials: false   <span class="c"># o token não fica salvo no .git/config</span>
       - name: gitleaks
         run: |
-          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.21.2 \
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.21.2@sha256:&lt;digest&gt; \
             git /repo --redact --verbose
 
   semgrep:
@@ -214,9 +217,11 @@ jobs:
       contents: read
       security-events: write   <span class="c"># só este job pode enviar SARIF</span></span>
     container:
-      image: semgrep/semgrep
+      image: semgrep/semgrep:&lt;versão&gt;@sha256:&lt;digest&gt;   <span class="c"># imagem de terceiro: fixe por digest</span>
     steps:
       - uses: actions/checkout@&lt;SHA-de-40-caracteres&gt;   <span class="c"># v4</span>
+        with:
+          persist-credentials: false
       - run: semgrep scan --config p/default --sarif --output semgrep.sarif
       - uses: github/codeql-action/upload-sarif@&lt;SHA&gt;    <span class="c"># v3</span>
         if: always()
@@ -231,6 +236,8 @@ jobs:
       security-events: write</span>
     steps:
       - uses: actions/checkout@&lt;SHA-de-40-caracteres&gt;   <span class="c"># v4</span>
+        with:
+          persist-credentials: false
       - name: Trivy (dependências e IaC do repositório)
         uses: aquasecurity/trivy-action@&lt;SHA&gt;            <span class="c"># fixe por SHA</span>
         with:
@@ -256,6 +263,7 @@ jobs:
   <p>Pontos de design que valem explicar:</p>
   <ul>
     <li><strong>Placeholders <code>&lt;SHA&gt;</code></strong>: substitua pelo SHA completo do commit da release que você escolheu (aparece na página de releases da action). Não copie SHAs de tutoriais sem conferir. O Dependabot, configurado com <code>package-ecosystem: github-actions</code>, mantém esses SHAs atualizados.</li>
+    <li><strong><code>persist-credentials: false</code> e imagens por digest</strong>: por padrão o <code>actions/checkout</code> grava o token no <code>.git/config</code>, ao alcance de qualquer container ou script que rode depois no mesmo job. E as imagens de terceiros (Semgrep, gitleaks) seguem a mesma regra das actions: tag pode ser movida, digest não.</li>
     <li><strong>Gitleaks via container</strong>: a action oficial do gitleaks exige licença gratuita para repositórios de organizações; rodar a imagem diretamente evita isso. Confira a versão mais recente da imagem.</li>
     <li><strong>Relatar tudo, bloquear pouco</strong>: o primeiro passo do Trivy envia HIGH e CRITICAL para a aba Security; o segundo só falha o build em CRITICAL que já tem correção. Isso é política, não detalhe técnico, e é o assunto da próxima seção.</li>
     <li><strong>Semgrep</strong>: <code>p/default</code> é um conjunto público de regras; depois você troca por um conjunto adaptado à sua stack (por exemplo <code>p/python</code>, <code>p/owasp-top-ten</code>). Ele não falha o build por padrão com <code>--sarif</code>; adicione <code>--error</code> quando o ruído estiver sob controle.</li>
@@ -316,6 +324,18 @@ jobs:
   <div class="callout warn">
     <span class="callout-title">Armadilha comum</span>
     <p>"Número de vulnerabilidades encontradas" sozinho é uma métrica ruim: sobe quando você adiciona um scanner novo (o que é bom) e cai quando alguém desliga um (o que é péssimo). Prefira métricas de fluxo, como MTTR e cumprimento de SLA.</p>
+  </div>
+
+  <div class="callout ia">
+    <span class="callout-title">E com IA?</span>
+    <ul>
+      <li><strong>Pacotes que não existem.</strong> Assistentes de código sugerem dependências inventadas: num estudo publicado no USENIX Security 2025, 19,7% dos pacotes sugeridos não existiam. Um atacante pode registrar esses nomes (<em>slopsquatting</em>). O SCA no PR e a pergunta "esse pacote existe, e quem publica?" resolvem boa parte.</li>
+      <li><strong>Código gerado passa pelo mesmo pipeline.</strong> Num estudo do IEEE S&amp;P 2022, cerca de 40% do código gerado pelo Copilot em cenários de risco era vulnerável. SAST, SCA e revisão humana valem igual, e alguém do time responde pelo merge.</li>
+      <li><strong>Modelos e servidores MCP são dependências.</strong> Fixe versão e hash, revise que ferramentas cada servidor expõe e rode com o mínimo de permissão.</li>
+      <li><strong>Agente no CI é alvo de prompt injection.</strong> Um agente que lê issues e PRs de terceiros pode receber instruções escondidas nesse texto. Dê <code>permissions:</code> mínimas ao job e não exponha segredos a ele.</li>
+      <li><strong>Segredo não vai para o prompt</strong>, nem para os arquivos de contexto do agente. Inclua esses arquivos no secret scanning.</li>
+    </ul>
+    <p>Os diagramas do ciclo de vida, antes e depois da IA, estão em <a href="09-sdlc-e-ia.html">SDLC seguro e IA</a>.</p>
   </div>
 
   <h2 id="checkpoint">Checkpoint</h2>
